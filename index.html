@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Image Toolkit — Compressor & Converters (Debug Build)</title>
+  <meta name="description" content="Image tools - client-side. Compress, convert, image→PDF, resize, rotate." />
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    :root { --brand:#0d6efd; }
+    body { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:#f6f9ff; padding-bottom:2.5rem; }
+    .tool-card { border-radius:.6rem; box-shadow:0 6px 18px rgba(13,110,253,0.06); }
+    .dropzone { border:2px dashed rgba(13,110,253,0.12); border-radius:.5rem; padding:12px; text-align:center; cursor:pointer; background:linear-gradient(90deg, rgba(13,110,253,0.02), transparent); }
+    .preview-img{ max-width:100%; height:auto; display:block; margin:auto; }
+    footer { text-align:center; color:#6c757d; margin-top:1.5rem; }
+  </style>
+</head>
+<body>
+  <main class="container py-4">
+    <header class="text-center mb-4">
+      <h1 class="mb-1">Image Toolkit</h1>
+      <p class="text-muted mb-2">Compress • JPG↔PNG • Image → PDF • Resize • Rotate — sab browser me.</p>
+    </header>
+
+    <!-- File chooser + preview -->
+    <section class="card p-3 mb-4 tool-card">
+      <div class="row g-3 align-items-center">
+        <div class="col-lg-5">
+          <label class="form-label fw-semibold">Choose images</label>
+          <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Drop images here or click">
+            <div class="mb-2"><i class="bi bi-cloud-arrow-up" style="font-size:1.3rem;color:var(--brand)"></i></div>
+            <div class="text-muted">Drag & drop, or click to browse (PNG/JPG/WebP/GIF)</div>
+            <input id="fileInput" type="file" accept="image/*" multiple hidden>
+          </div>
+          <div class="mt-2 text-muted small">Selected: <span id="fileCount">0</span> file(s)</div>
+        </div>
+
+        <div class="col-lg-7">
+          <label class="form-label fw-semibold">Preview</label>
+          <div id="previewArea" class="p-2" style="min-height:120px;">
+            <div id="previewPlaceholder" class="text-muted">Preview of first selected image will appear here.</div>
+            <img id="previewImage" class="preview-img d-none" alt="preview">
+          </div>
+          <div class="mt-2 d-flex gap-2">
+            <button id="clearBtn" class="btn btn-outline-danger btn-sm"><i class="bi bi-x-circle"></i> Clear</button>
+            <a id="downloadAllBtn" class="btn btn-outline-success btn-sm d-none"><i class="bi bi-download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tools grid (Bootstrap rows/cols for reliability) -->
+    <section class="row g-3" id="toolsGrid">
+      <!-- Compressor -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100">
+          <h5>Image Compressor</h5>
+          <p class="text-muted small">Reduce file size (quality 0.1 - 1.0)</p>
+          <label class="form-label">Quality: <span id="qualityLabel">0.8</span></label>
+          <input id="qualityRange" type="range" min="0.1" max="1" step="0.05" value="0.8" class="form-range mb-2">
+          <div class="d-flex gap-2">
+            <button id="compressBtn" class="btn btn-primary"><i class="bi bi-gear-wide-connected"></i> Compress Selected</button>
+            <button id="compressAllBtn" class="btn btn-outline-primary">Compress All</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image to PDF -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100">
+          <h5>Image → PDF</h5>
+          <p class="text-muted small">Combine images into PDF</p>
+          <label class="form-label">Orientation</label>
+          <select id="pdfOrientation" class="form-select form-select-sm mb-2"><option value="portrait" selected>Portrait</option><option value="landscape">Landscape</option></select>
+          <button id="imgToPdfBtn" class="btn btn-success"><i class="bi bi-file-earmark-pdf"></i> Convert to PDF</button>
+        </div>
+      </div>
+
+      <!-- JPG -> PNG -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100">
+          <h5>JPG → PNG</h5>
+          <p class="text-muted small">Convert JPG/JPEG to PNG</p>
+          <button id="jpg2pngBtn" class="btn btn-outline-secondary">Convert Selected</button>
+        </div>
+      </div>
+
+      <!-- PNG -> JPG -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100">
+          <h5>PNG → JPG</h5>
+          <p class="text-muted small">Convert PNG to JPG (set quality)</p>
+          <label class="form-label">Output quality: <span id="png2jpgQualityLabel">0.9</span></label>
+          <input id="png2jpgQualityRange" type="range" min="0.1" max="1" step="0.05" value="0.9" class="form-range mb-2">
+          <button id="png2jpgBtn" class="btn btn-outline-secondary">Convert Selected</button>
+        </div>
+      </div>
+
+      <!-- Resize / Rotate -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100">
+          <h5>Resize & Rotate</h5>
+          <label class="form-label">Width (px)</label>
+          <input id="resizeWidth" type="number" class="form-control form-control-sm mb-2" placeholder="e.g. 1200">
+          <label class="form-label">Height (px)</label>
+          <input id="resizeHeight" type="number" class="form-control form-control-sm mb-2" placeholder="e.g. 800">
+          <div class="mb-2">
+            <div class="d-flex gap-2">
+              <button data-rotate="-90" class="rotateBtn btn btn-sm btn-outline-secondary">⟲ -90°</button>
+              <button data-rotate="90" class="rotateBtn btn btn-sm btn-outline-secondary">⟳ 90°</button>
+              <button data-rotate="180" class="rotateBtn btn btn-sm btn-outline-secondary">180°</button>
+            </div>
+          </div>
+          <div class="d-flex gap-2">
+            <button id="resizeBtn" class="btn btn-success btn-sm">Apply Resize</button>
+            <button id="rotateApplyBtn" class="btn btn-success btn-sm">Apply Rotate</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <small>All processing runs in browser. No uploads. — Debug Build (open console for logs)</small>
+    </footer>
+  </main>
+
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@1.0.18/dist/browser-image-compression.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // DEBUG: logs to help troubleshoot
+    console.log('Image Toolkit (debug) starting...');
+
+    // DOM refs
+    const fileInput = document.getElementById('fileInput');
+    const dropzone = document.getElementById('dropzone');
+    const fileCount = document.getElementById('fileCount');
+    const previewImage = document.getElementById('previewImage');
+    const previewPlaceholder = document.getElementById('previewPlaceholder');
+    const qualityRange = document.getElementById('qualityRange');
+    const qualityLabel = document.getElementById('qualityLabel');
+    const compressBtn = document.getElementById('compressBtn');
+    const compressAllBtn = document.getElementById('compressAllBtn');
+    const imgToPdfBtn = document.getElementById('imgToPdfBtn');
+    const jpg2pngBtn = document.getElementById('jpg2pngBtn');
+    const png2jpgBtn = document.getElementById('png2jpgBtn');
+    const png2jpgQualityRange = document.getElementById('png2jpgQualityRange');
+    const png2jpgQualityLabel = document.getElementById('png2jpgQualityLabel');
+    const resizeBtn = document.getElementById('resizeBtn');
+    const resizeWidth = document.getElementById('resizeWidth');
+    const resizeHeight = document.getElementById('resizeHeight');
+    const rotateApplyBtn = document.getElementById('rotateApplyBtn');
+    const rotateBtns = document.querySelectorAll('.rotateBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const downloadAllBtn = document.getElementById('downloadAllBtn');
+
+    let selectedFiles = [];
+    let pendingRotateDegrees = 0;
+
+    function logState(){ console.log('Selected files:', selectedFiles.map(f=>f.name)); }
+
+    function updateFileCount(){
+      fileCount.textContent = selectedFiles.length;
+      if(selectedFiles.length === 0){
+        previewImage.classList.add('d-none');
+        previewPlaceholder.classList.remove('d-none');
+        downloadAllBtn.classList.add('d-none');
+      } else {
+        previewPlaceholder.classList.add('d-none');
+        previewImage.classList.remove('d-none');
+        downloadAllBtn.classList.remove('d-none');
+        showPreview(selectedFiles[0]);
+      }
+      logState();
+    }
+
+    function showPreview(file){
+      const url = URL.createObjectURL(file);
+      previewImage.src = url;
+      previewImage.onload = () => URL.revokeObjectURL(url);
+    }
+
+    // Drag/drop & file select
+    dropzone.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('border-primary'); });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('border-primary'));
+    dropzone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropzone.classList.remove('border-primary');
+      const dt = e.dataTransfer;
+      if(dt && dt.files) handleFiles(Array.from(dt.files));
+    });
+    fileInput.addEventListener('change', e => handleFiles(Array.from(e.target.files)));
+
+    function handleFiles(files){
+      const imgs = files.filter(f => f.type && f.type.startsWith('image/'));
+      if(imgs.length === 0){ alert('Please select image files.'); return; }
+      selectedFiles = selectedFiles.concat(imgs);
+      updateFileCount();
+    }
+
+    clearBtn.addEventListener('click', () => {
+      selectedFiles = [];
+      updateFileCount();
+    });
+
+    downloadAllBtn.addEventListener('click', () => {
+      if(selectedFiles.length === 0) return alert('No files selected.');
+      if(selectedFiles.length === 1) window.saveAs(selectedFiles[0], selectedFiles[0].name);
+      else selectedFiles.forEach(f => window.saveAs(f, f.name));
+    });
+
+    qualityRange?.addEventListener('input', () => qualityLabel.textContent = qualityRange.value);
+    png2jpgQualityRange?.addEventListener('input', () => png2jpgQualityLabel.textContent = png2jpgQualityRange.value);
+
+    // Helpers
+    function fileToDataURL(file){ return new Promise((res,rej)=> { const fr=new FileReader(); fr.onload=()=>res(fr.result); fr.onerror=rej; fr.readAsDataURL(file); }); }
+    function createImage(dataUrl){ return new Promise((res,rej)=>{ const img=new Image(); img.onload=()=>res(img); img.onerror=rej; img.src=dataUrl; }); }
+    function changeExt(name,newExt){ return name.replace(/\.[^/.]+$/, newExt); }
+
+    // Converters & actions
+    compressBtn.addEventListener('click', async () => {
+      try{
+        if(selectedFiles.length===0) return alert('Select images first.');
+        const file = selectedFiles[0];
+        const quality = parseFloat(qualityRange.value || 0.8);
+        console.log('Compressing', file.name, 'quality', quality);
+        const options = { initialQuality: quality, useWebWorker: true };
+        const compressedBlob = await imageCompression(file, options);
+        window.saveAs(compressedBlob, changeExt(file.name,'') + '-compressed.jpg');
+      }catch(err){ console.error('compress err',err); alert('Compression failed: '+err.message); }
+    });
+
+    compressAllBtn.addEventListener('click', async () => {
+      if(selectedFiles.length===0) return alert('Select images first.');
+      const quality = parseFloat(qualityRange.value || 0.8);
+      for(const file of selectedFiles){
+        try{
+          const b = await imageCompression(file, { initialQuality: quality, useWebWorker:true });
+          window.saveAs(b, changeExt(file.name,'') + '-compressed.jpg');
+        }catch(e){ console.error('compress all err', e); }
+      }
+    });
+
+    imgToPdfBtn.addEventListener('click', async () => {
+      if(selectedFiles.length===0) return alert('Select images first.');
+      const { jsPDF } = window.jspdf;
+      const orientation = document.getElementById('pdfOrientation').value || 'portrait';
+      const pdf = new jsPDF({ unit:'pt', format:'a4', orientation });
+      try{
+        for(let i=0;i<selectedFiles.length;i++){
+          const file = selectedFiles[i];
+          const dataUrl = await fileToDataURL(file);
+          const img = await createImage(dataUrl);
+          const pageW = pdf.internal.pageSize.getWidth();
+          const pageH = pdf.internal.pageSize.getHeight();
+          const ratio = Math.min(pageW/img.width, pageH/img.height);
+          const imgW = img.width*ratio, imgH = img.height*ratio;
+          const x = (pageW - imgW)/2, y = (pageH - imgH)/2;
+          pdf.addImage(dataUrl, file.type.includes('png') ? 'PNG' : 'JPEG', x, y, imgW, imgH);
+          if(i < selectedFiles.length-1) pdf.addPage();
+        }
+        pdf.save('images.pdf');
+      }catch(err){ console.error('pdf err', err); alert('PDF conversion failed'); }
+    });
+
+    jpg2pngBtn.addEventListener('click', async () => {
+      if(selectedFiles.length===0) return alert('Select images first.');
+      const file = selectedFiles[0];
+      try{
+        const dataUrl = await fileToDataURL(file);
+        const img = await createImage(dataUrl);
+        const canvas = document.createElement('canvas'); canvas.width = img.width; canvas.height = img.height;
+        const ctx = canvas.getContext('2d'); ctx.drawImage(img,0,0);
+        canvas.toBlob(blob => window.saveAs(blob, changeExt(file.name,'.png')), 'image/png');
+      }catch(e){ console.error('jpg->png err', e); alert('Conversion failed'); }
+    });
+
+    png2jpgBtn.addEventListener('click', async () => {
+      if(selectedFiles.length===0) return alert('Select images first.');
+      const file = selectedFiles[0];
+      const quality = parseFloat(png2jpgQualityRange.value || 0.9);
+      try{
+        const dataUrl = await fileToDataURL(file);
+        const img = await createImage(dataUrl);
+        const canvas = document.createElement('canvas'); canvas.width = img.width; canvas.height = img.height;
+        const ctx = canvas.getContext('2d'); ctx.fillStyle='#fff'; ctx.fillRect(0,0,canvas.width,canvas.height); ctx.drawImage(img,0,0);
+        canvas.toBlob(blob => window.saveAs(blob, changeExt(file.name,'.jpg')), 'image/jpeg', quality);
+      }catch(e){ console.error('png->jpg err', e); alert('Conversion failed'); }
+    });
+
+    resizeBtn.addEventListener('click', async () => {
+      if(selectedFiles.length===0) return alert('Select images first.');
+      const file = selectedFiles[0];
+      const w = parseInt(resizeWidth.value) || null;
+      const h = parseInt(resizeHeight.value) || null;
+      if(!w && !h) return alert('Enter width or height.');
+      try{
+        const dataUrl = await fileToDataURL(file);
+        const img = await createImage(dataUrl);
+        let newW = img.width, newH = img.height;
+        if(w && h){ newW = w; newH = h; }
+        else if(w){ newW = w; newH = Math.round(img.height * (w / img.width)); }
+        else { newH = h; newW = Math.round(img.width * (h / img.height)); }
+        const canvas = document.createElement('canvas'); canvas.width = newW; canvas.height = newH;
+        const ctx = canvas.getContext('2d'); ctx.drawImage(img,0,0,newW,newH);
+        canvas.toBlob(blob => window.saveAs(blob, changeExt(file.name,'') + `-resized-${newW}x${newH}.jpg`), 'image/jpeg', 0.92);
+      }catch(e){ console.error('resize err', e); alert('Resize failed'); }
+    });
+
+    rotateBtns.forEach(btn => btn.addEventListener('click', (e) => {
+      rotateBtns.forEach(b => b.classList.remove('btn-primary'));
+      e.currentTarget.classList.add('btn-primary');
+      pendingRotateDegrees = parseInt(e.currentTarget.dataset.rotate);
+      console.log('Selected rotate:', pendingRotateDegrees);
+    }));
+
+    rotateApplyBtn.addEventListener('click', async () => {
+      if(selectedFiles.length===0) return alert('Select images first.');
+      if(!pendingRotateDegrees) return alert('Choose rotation first.');
+      const file = selectedFiles[0];
+      try{
+        const dataUrl = await fileToDataURL(file);
+        const img = await createImage(dataUrl);
+        const rad = pendingRotateDegrees * Math.PI / 180;
+        const sin = Math.abs(Math.sin(rad)), cos = Math.abs(Math.cos(rad));
+        const cw = Math.round(img.width * cos + img.height * sin);
+        const ch = Math.round(img.width * sin + img.height * cos);
+        const canvas = document.createElement('canvas'); canvas.width = cw; canvas.height = ch;
+        const ctx = canvas.getContext('2d');
+        ctx.translate(cw/2, ch/2);
+        ctx.rotate(rad);
+        ctx.drawImage(img, -img.width/2, -img.height/2);
+        canvas.toBlob(blob => window.saveAs(blob, changeExt(file.name, '') + `-rot${pendingRotateDegrees}.jpg`), 'image/jpeg', 0.92);
+      }catch(e){ console.error('rotate err', e); alert('Rotate failed'); }
+    });
+
+    // initial state
+    updateFileCount();
+    console.log('Ready. If you see UI issues, open DevTools (F12) → Console and paste errors here.');
+  </script>
+</body>
+</html>
