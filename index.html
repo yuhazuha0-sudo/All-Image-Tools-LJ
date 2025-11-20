@@ -153,3 +153,151 @@
           </div>
         </div>
       </div>
+<!-- Image → PDF -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" role="region" aria-labelledby="img2pdfTitle">
+          <div id="img2pdfTitle" class="tool-header">
+            <i class="bi bi-file-earmark-pdf-fill tool-icon" aria-hidden="true"></i>
+            <h5 class="mb-0">Image → PDF</h5>
+          </div>
+          <p class="small-muted">Combine images into PDF (multi-page).</p>
+          <label class="form-label">Orientation</label>
+          <select id="pdfOrientation" class="form-select form-select-sm mb-2" aria-label="Choose PDF orientation">
+            <option value="portrait" selected>Portrait</option>
+            <option value="landscape">Landscape</option>
+          </select>
+          <button id="imgToPdfBtn" class="btn btn-success">
+            <i class="bi bi-file-earmark-pdf"></i> Convert to PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- JPG → PNG -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" role="region" aria-labelledby="jpg2pngTitle">
+          <div id="jpg2pngTitle" class="tool-header">
+            <i class="bi bi-filetype-jpg tool-icon" aria-hidden="true"></i>
+            <h5 class="mb-0">JPG → PNG</h5>
+          </div>
+          <p class="small-muted">Convert JPG/JPEG to PNG (lossless).</p>
+          <button id="jpg2pngBtn" class="btn btn-outline-secondary">Convert Selected</button>
+        </div>
+      </div>
+
+      <!-- PNG → JPG -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" role="region" aria-labelledby="png2jpgTitle">
+          <div id="png2jpgTitle" class="tool-header">
+            <i class="bi bi-filetype-png tool-icon" aria-hidden="true"></i>
+            <h5 class="mb-0">PNG → JPG</h5>
+          </div>
+          <p class="small-muted">Convert PNG to JPG with adjustable quality.</p>
+          <label class="form-label">Quality: <span id="png2jpgQualityLabel">0.9</span></label>
+          <input id="png2jpgQualityRange" type="range" min="0.1" max="1" step="0.05" value="0.9" class="form-range mb-2">
+          <button id="png2jpgBtn" class="btn btn-outline-secondary">Convert Selected</button>
+        </div>
+      </div>
+
+      <!-- Resize & Rotate -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" role="region" aria-labelledby="resizeTitle">
+          <div id="resizeTitle" class="tool-header">
+            <i class="bi bi-arrows-expand tool-icon" aria-hidden="true"></i>
+            <h5 class="mb-0">Resize & Rotate</h5>
+          </div>
+
+          <label class="form-label">Width (px)</label>
+          <input id="resizeWidth" type="number" class="form-control form-control-sm mb-2" placeholder="e.g. 1200">
+
+          <label class="form-label">Height (px)</label>
+          <input id="resizeHeight" type="number" class="form-control form-control-sm mb-2" placeholder="e.g. 800">
+
+          <div class="mb-2">
+            <div class="d-flex gap-2">
+              <button data-rotate="-90" class="rotateBtn btn btn-sm btn-outline-secondary">⟲ -90°</button>
+              <button data-rotate="90" class="rotateBtn btn btn-sm btn-outline-secondary">⟳ 90°</button>
+              <button data-rotate="180" class="rotateBtn btn btn-sm btn-outline-secondary">180°</button>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button id="resizeBtn" class="btn btn-success btn-sm">Apply Resize</button>
+            <button id="rotateApplyBtn" class="btn btn-success btn-sm">Apply Rotate</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ✨ START OF NEW FULL 42-TOOLS SECTION -->
+      <h3 class="mt-4 mb-2 fw-bold">FORMAT CONVERSION TOOLS</h3>
+
+      <!-- JPG/PNG → WebP -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100">
+          <div class="tool-header">
+            <i class="bi bi-image tool-icon"></i>
+            <h5 class="mb-0">JPG / PNG → WebP</h5>
+          </div>
+          <p class="small-muted">Convert images to WebP format (browser-native).</p>
+          <button id="toWebpBtn" class="btn btn-outline-primary btn-sm">Convert to WebP</button>
+        </div>
+      </div>
+
+      <!-- WebP → JPG/PNG -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100">
+          <div class="tool-header">
+            <i class="bi bi-filetype-webp tool-icon"></i>
+            <h5 class="mb-0">WebP → JPG / PNG</h5>
+          </div>
+          <p class="small-muted">Convert WebP images back to JPG/PNG.</p>
+          <button id="webpToJpgPngBtn" class="btn btn-outline-primary btn-sm">Convert</button>
+        </div>
+      </div>
+
+      <!-- Image → AVIF -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100">
+          <div class="tool-header">
+            <i class="bi bi-lightning-charge tool-icon"></i>
+            <h5 class="mb-0">Image → AVIF</h5>
+          </div>
+          <p class="small-muted">Convert to AVIF (client-side supported browsers only; API option fallback).</p>
+          <button id="toAvifBtn" class="btn btn-outline-primary btn-sm">Convert to AVIF</button>
+        </div>
+      </div>
+
+      <!-- Image → ICO / Favicon -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100">
+          <div class="tool-header">
+            <i class="bi bi-bookmark-star tool-icon"></i>
+            <h5 class="mb-0">Image → ICO / Favicon</h5>
+          </div>
+          <p class="small-muted">Generate 16×16 / 32×32 ICO files.</p>
+          <button id="toIcoBtn" class="btn btn-outline-primary btn-sm">Create ICO</button>
+        </div>
+      </div>
+
+      <!-- SVG → PNG / JPG -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100">
+          <div class="tool-header">
+            <i class="bi bi-palette tool-icon"></i>
+            <h5 class="mb-0">SVG → PNG / JPG</h5>
+          </div>
+          <p class="small-muted">Convert vector SVG graphics into raster PNG/JPG.</p>
+          <button id="svgToRasterBtn" class="btn btn-outline-primary btn-sm">Convert SVG</button>
+        </div>
+      </div>
+
+      <!-- Raster → SVG (tracing) -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100">
+          <div class="tool-header">
+            <i class="bi bi-brush tool-icon"></i>
+            <h5 class="mb-0">Raster → SVG (Tracing)</h5>
+          </div>
+          <p class="small-muted">Best-effort auto-trace raster image into SVG.</p>
+          <button id="rasterToSvgBtn" class="btn btn-outline-primary btn-sm">Trace to SVG</button>
+        </div>
+      </div>
