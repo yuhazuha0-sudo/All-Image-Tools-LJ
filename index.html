@@ -73,10 +73,16 @@
   <main class="container">
     <header class="text-center mb-4">
       <div class="d-flex align-items-center justify-content-center gap-3 mb-2">
-        <!-- Use repo icon first; fallback to your uploaded local path (system will convert that to public url) -->
-        <img id="siteLogo" src="/icons/icon-512.png" alt="All Image Tools" width="52" height="52"
-             data-local-url="/mnt/data/A_2D_digital_illustration_features_a_square_app_ic.png"
-             style="border-radius:10px; object-fit:cover;">
+      <img
+  class="tool-logo"
+  alt="All Image Tools"
+  src="/All-Image-Tools/icons/icon-192.png"
+  srcset="/All-Image-Tools/icons/icon-192.png 192w, /All-Image-Tools/icons/icon-512.png 512w"
+  sizes="28px"
+  onerror="this.onerror=null;this.src='/All-Image-Tools/icons/icon-512.png?v=2';"
+  loading="eager"
+  style="width:28px;height:28px;object-fit:contain;border-radius:6px;"
+/>
         <div>
           <div class="brand">All Image Tools</div>
           <div class="small-muted">Selected popular tools — client-side. No forced uploads.</div>
