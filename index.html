@@ -539,5 +539,28 @@
       ['compressor','resize','imgpdf','jpgpng'].forEach(t => renderToolPreview(t));
     })();
   </script>
+
+  <!-- Typing animation for document.title (paste before </body>) -->
+<script>
+(function(){
+  const titles = ["All Image Tools — Free Online Image Compressor"]; // you can add more items to loop
+  const fullTitle = titles[0];
+  let i = 0;
+  let charIndex = 0;
+  const typingSpeed = 80; // ms per character
+  const startDelay = 300; // ms before typing starts
+
+  function typeOnce() {
+    if (charIndex <= fullTitle.length) {
+      document.title = fullTitle.slice(0, charIndex);
+      charIndex++;
+      setTimeout(typeOnce, typingSpeed);
+    }
+  }
+
+  // optional: start after a small delay so page shows up first
+  setTimeout(typeOnce, startDelay);
+})();
+</script>
 </body>
 </html>
