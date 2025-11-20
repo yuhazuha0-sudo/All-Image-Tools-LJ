@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>All Image Tools — Select Tools</title>
+  <meta name="description" content="Selected popular image tools: Compressor, Resize & Rotate, Image → PDF, JPG → PNG. Privacy-first — client-side processing." />
+  <meta name="theme-color" content="#0d6efd">
+  <link rel="manifest" href="manifest.json?v=1">
+
+  <!-- SEO / Social -->
+  <meta property="og:title" content="All Image Tools" />
+  <meta property="og:description" content="Compressor, Resize, Image→PDF, JPG→PNG — all client-side." />
+  <meta property="og:image" content="https://example.com/og-image-placeholder.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Preconnect & Bootstrap -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f6f9ff; --card:#fff; --text:#222; --muted:#6c757d;
+      --brand:#0d6efd;
+      --accent: linear-gradient(90deg,#ff6b6b,#ffb86b);
+      --card-radius:.6rem;
+    }
+    body{
+      background:var(--bg); color:var(--text); font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      padding: 1.5rem 0 3.5rem;
+    }
+    .tool-card{ border-radius:var(--card-radius); background:var(--card); box-shadow:0 6px 18px rgba(13,110,253,0.06); }
+    header .brand{ font-weight:700; background:linear-gradient(90deg,#0d6efd,#6610f2); -webkit-background-clip:text; color:transparent; font-size:1.25rem; }
+    .tool-logo{ width:28px; height:28px; object-fit:contain; margin-right:.5rem; border-radius:6px; }
+    .btn-tool{ background:var(--accent); color:#fff; border:none; box-shadow:0 6px 18px rgba(255,107,107,0.12); }
+    .small-muted{ color:var(--muted); }
+    .tool-local-preview img{ max-height:140px; display:block; margin:auto; }
+    .dropzone{ border:2px dashed rgba(13,110,253,0.12); padding:12px; text-align:center; border-radius:8px; cursor:pointer; background:linear-gradient(90deg, rgba(13,110,253,0.02), transparent); }
+    footer{ color:var(--muted); text-align:center; margin-top:1.5rem; }
+    .kbd{ font-size:.8rem; padding:.15rem .35rem; border-radius:.3rem; background:#f1f1f1; border:1px solid #e0e0e0; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="text-center mb-4">
+      <div class="d-flex align-items-center justify-content-center gap-3 mb-2">
+        <!-- Use repo icon first; fallback to your uploaded local path (system will convert that to public url) -->
+        <img id="siteLogo" src="/icons/icon-512.png" alt="All Image Tools" width="52" height="52"
+             data-local-url="/mnt/data/A_2D_digital_illustration_features_a_square_app_ic.png"
+             style="border-radius:10px; object-fit:cover;">
+        <div>
+          <div class="brand">All Image Tools</div>
+          <div class="small-muted">Selected popular tools — client-side. No forced uploads.</div>
+        </div>
+      </div>
+      <div>
+        <button id="globalOpenBtn" class="btn btn-outline-primary btn-sm me-1"><i class="bi bi-folder2-open"></i> Open (Ctrl+O)</button>
+        <button id="helpBtn" class="btn btn-outline-secondary btn-sm">Help</button>
+      </div>
+    </header>
+
+    <!-- Global fallback chooser (optional) -->
+    <section class="mb-4">
+      <div class="row g-3">
+        <div class="col-lg-6">
+          <div class="dropzone" id="globalDropzone" tabindex="0" role="button" aria-label="Drop or click to add images">
+            <div><i class="bi bi-cloud-arrow-up" style="font-size:1.2rem;color:var(--brand)"></i></div>
+            <div class="small-muted">Drag & drop or click to select files (global fallback)</div>
+            <input id="globalFileInput" type="file" accept="image/*" multiple hidden>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div>
+            <span class="small-muted">Selected (global):</span>
+            <span id="globalCount">0</span> files — <span class="kbd">Ctrl+O</span>
+          </div>
+          <div id="globalPreview" class="mt-2"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tools grid -->
+    <section class="row g-3">
+
+      <!-- 1) Image Compressor -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" id="card-compressor">
+          <div class="d-flex align-items-center mb-2">
+            <img src="icons/compressor.png" class="tool-logo" onerror="this.style.display='none'">
+            <i class="bi bi-gear tool-icon me-2"></i>
+            <h5 class="mb-0">Image Compressor</h5>
+          </div>
+          <p class="small-muted">Reduce file size. Options: target KB, percentage reduction, quality slider, max edge resize. Batch supported.</p>
+
+          <!-- per-tool input -->
+          <label class="form-label small-muted">Input image (per-tool)</label>
+          <input type="file" accept="image/*" class="form-control form-control-sm mb-2 tool-input" data-tool="compressor">
+          <div class="tool-local-preview mb-2" data-preview="compressor"></div>
+
+          <!-- Options -->
+          <label class="form-label">Target size (KB) — leave empty if not needed</label>
+          <input id="compTargetKb" type="number" class="form-control form-control-sm mb-2" placeholder="e.g. 150">
+
+          <label class="form-label">Target reduction (%)</label>
+          <input id="compTargetPerc" type="number" class="form-control form-control-sm mb-2" placeholder="e.g. 60">
+
+          <label class="form-label">Quality (0.1 - 1.0) <small id="compQualityLabel">0.8</small></label>
+          <input id="compQuality" type="range" min="0.1" max="1" step="0.01" value="0.8" class="form-range mb-2">
+
+          <label class="form-label">Max long-edge (px) — optional</label>
+          <input id="compMaxEdge" type="number" class="form-control form-control-sm mb-2" placeholder="e.g. 1600">
+
+          <div class="d-flex gap-2">
+            <button id="compressBtn" class="btn btn-tool"><i class="bi bi-filter-circle"></i> Compress</button>
+            <button id="compressBatchBtn" class="btn btn-outline-primary">Compress Batch</button>
+            <a id="compStatus" class="small-muted align-self-center">Ready</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2) Resize & Rotate -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" id="card-resize">
+          <div class="d-flex align-items-center mb-2">
+            <img src="icons/resize.png" class="tool-logo" onerror="this.style.display='none'">
+            <i class="bi bi-arrows-fullscreen tool-icon me-2"></i>
+            <h5 class="mb-0">Resize & Rotate</h5>
+          </div>
+          <p class="small-muted">Resize with aspect lock, rotate presets, and arbitrary rotation.</p>
+
+          <label class="form-label small-muted">Input image</label>
+          <input type="file" accept="image/*" class="form-control form-control-sm mb-2 tool-input" data-tool="resize">
+          <div class="tool-local-preview mb-2" data-preview="resize"></div>
+
+          <div class="row g-2 mb-2">
+            <div class="col">
+              <label class="form-label">Width (px)</label>
+              <input id="resizeW" type="number" class="form-control form-control-sm" placeholder="e.g. 1200">
+            </div>
+            <div class="col">
+              <label class="form-label">Height (px)</label>
+              <input id="resizeH" type="number" class="form-control form-control-sm" placeholder="e.g. 800">
+            </div>
+          </div>
+
+          <div class="form-check form-switch mb-2">
+            <input class="form-check-input" type="checkbox" id="keepAspect" checked>
+            <label class="form-check-label small-muted" for="keepAspect">Preserve aspect ratio</label>
+          </div>
+
+          <label class="form-label">Rotate degrees: <span id="rotLabel">0</span>°</label>
+          <input id="rotRange" type="range" min="-180" max="180" value="0" class="form-range mb-2">
+
+          <div class="d-flex gap-2">
+            <button id="applyResizeBtn" class="btn btn-tool"><i class="bi bi-arrows-angle-contract"></i> Apply</button>
+            <button data-rotate="-90" class="rotatePreset btn btn-outline-secondary">⟲ -90°</button>
+            <button data-rotate="90" class="rotatePreset btn btn-outline-secondary">⟳ 90°</button>
+            <button data-rotate="180" class="rotatePreset btn btn-outline-secondary">180°</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3) Image → PDF (multi-page) -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" id="card-pdf">
+          <div class="d-flex align-items-center mb-2">
+            <img src="icons/pdf.png" class="tool-logo" onerror="this.style.display='none'">
+            <i class="bi bi-file-earmark-pdf tool-icon me-2"></i>
+            <h5 class="mb-0">Image → PDF</h5>
+          </div>
+          <p class="small-muted">Combine images (multi-page). Upload multiple images for PDF.</p>
+
+          <label class="form-label small-muted">Input images (multi)</label>
+          <input type="file" accept="image/*" class="form-control form-control-sm mb-2 tool-input" data-tool="imgpdf" multiple>
+          <div class="tool-local-preview mb-2" data-preview="imgpdf"></div>
+
+          <label class="form-label">Orientation</label>
+          <select id="pdfOrient" class="form-select form-select-sm mb-2"><option value="portrait" selected>Portrait</option><option value="landscape">Landscape</option></select>
+
+          <div class="d-flex gap-2">
+            <button id="imgToPdfBtn" class="btn btn-tool"><i class="bi bi-file-earmark-arrow-down"></i> Create PDF</button>
+            <a id="pdfStatus" class="small-muted align-self-center">Ready</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4) JPG → PNG (and PNG → JPG quality) -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" id="card-convert">
+          <div class="d-flex align-items-center mb-2">
+            <img src="icons/jpg2png.png" class="tool-logo" onerror="this.style.display='none'">
+            <i class="bi bi-filetype-jpg tool-icon me-2"></i>
+            <h5 class="mb-0">JPG ↔ PNG</h5>
+          </div>
+          <p class="small-muted">Convert JPG → PNG and PNG → JPG (adjust quality).</p>
+
+          <label class="form-label small-muted">Input image</label>
+          <input type="file" accept="image/*" class="form-control form-control-sm mb-2 tool-input" data-tool="jpgpng">
+          <div class="tool-local-preview mb-2" data-preview="jpgpng"></div>
+
+          <label class="form-label">PNG → JPG Quality: <span id="convQualityLabel">0.9</span></label>
+          <input id="convQuality" type="range" min="0.1" max="1" step="0.01" value="0.9" class="form-range mb-2">
+
+          <div class="d-flex gap-2">
+            <button id="jpgToPngBtn" class="btn btn-tool">JPG → PNG</button>
+            <button id="pngToJpgBtn" class="btn btn-tool">PNG → JPG</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <footer class="mt-4 mb-5">
+      <div class="small-muted">All processing occurs in your browser by default. API options are opt-in only.</div>
+    </footer>
+  </main>
+
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@1.0.18/dist/browser-image-compression.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js" defer></script>
+
+  <!-- Main JS -->
+  <script>
+    (function(){
+      // Basic DOM helpers
+      const $ = (s, ctx=document) => ctx.querySelector(s);
+      const $$ = (s, ctx=document) => Array.from(ctx.querySelectorAll(s));
+
+      // Header logo fallback to uploaded local path if repo icon 404s
+      const siteLogo = document.getElementById('siteLogo');
+      if(siteLogo){
+        siteLogo.addEventListener('error', function(){
+          const fallback = this.dataset.localUrl;
+          if(fallback && !this.dataset.fallbackUsed){
+            this.dataset.fallbackUsed = '1';
+            this.src = fallback;
+          }
+        });
+      }
+
+      // Per-tool files map
+      const perTool = {}; // toolId -> File or File[]
+
+      // Global files fallback
+      let globalFiles = [];
+
+      // Elements
+      const globalFileInput = $('#globalFileInput');
+      const globalDropzone = $('#globalDropzone');
+      const globalCount = $('#globalCount');
+      const globalPreview = $('#globalPreview');
+
+      // Attach global open button
+      $('#globalOpenBtn').addEventListener('click', ()=> globalFileInput.click());
+
+      // Global handlers
+      globalDropzone.addEventListener('click', ()=> globalFileInput.click());
+      globalDropzone.addEventListener('dragover', e=>{ e.preventDefault(); globalDropzone.classList.add('border-primary'); });
+      globalDropzone.addEventListener('dragleave', ()=> globalDropzone.classList.remove('border-primary'));
+      globalDropzone.addEventListener('drop', e=>{ e.preventDefault(); globalDropzone.classList.remove('border-primary'); handleGlobalFiles(Array.from(e.dataTransfer.files)); });
+
+      globalFileInput.addEventListener('change', e=> handleGlobalFiles(Array.from(e.target.files)));
+
+      function handleGlobalFiles(files){
+        const imgs = files.filter(f=> f.type && f.type.startsWith('image/'));
+        if(!imgs.length) { alert('Please select image files'); return; }
+        imgs.forEach(f=> {
+          if(!globalFiles.some(g=> g.name===f.name && g.size===f.size)) globalFiles.push(f);
+        });
+        renderGlobalPreview();
+      }
+      function renderGlobalPreview(){
+        globalCount.textContent = globalFiles.length;
+        globalPreview.innerHTML = '';
+        globalFiles.slice(0,6).forEach(f=>{
+          const img = document.createElement('img');
+          img.src = URL.createObjectURL(f); img.onload = ()=> URL.revokeObjectURL(img.src);
+          img.style.maxHeight='80px'; img.className='me-2 rounded';
+          globalPreview.appendChild(img);
+        });
+      }
+
+      // Per-tool input delegation
+      document.addEventListener('change', (e)=>{
+        if(!e.target.classList.contains('tool-input')) return;
+        const tool = e.target.dataset.tool;
+        if(!tool) return;
+        const files = e.target.files ? Array.from(e.target.files) : [];
+        perTool[tool] = files.length === 1 ? files[0] : files;
+        renderToolPreview(tool);
+      });
+
+      function renderToolPreview(tool){
+        const container = document.querySelector(`[data-preview="${tool}"]`);
+        if(!container) return;
+        container.innerHTML = '';
+        const files = perTool[tool] ? (Array.isArray(perTool[tool]) ? perTool[tool] : [perTool[tool]]) : [];
+        if(!files.length){
+          container.innerHTML = '<div class="small-muted">No file selected</div>'; return;
+        }
+        files.forEach(f=>{
+          if(!f.type.startsWith('image/')) return;
+          const img = document.createElement('img'); img.className='rounded mb-1';
+          img.style.maxHeight='120px';
+          const url = URL.createObjectURL(f);
+          img.src = url; img.onload = ()=> URL.revokeObjectURL(url);
+          container.appendChild(img);
+        });
+      }
+
+      // Helper: prefer per-tool file, else global first
+      function fileFor(tool){
+        if(perTool[tool]) return perTool[tool];
+        return globalFiles.length ? globalFiles[0] : null;
+      }
+
+      // Helpers: file->dataURL, createImage
+      function fileToDataURL(file){ return new Promise((res, rej)=> { const fr=new FileReader(); fr.onload=()=>res(fr.result); fr.onerror=rej; fr.readAsDataURL(file); }); }
+      function createImage(dataUrl){ return new Promise((res, rej)=> { const img=new Image(); img.onload = ()=> res(img); img.onerror = rej; img.src = dataUrl; }); }
+      function changeName(file, suffix){ return (file.name.replace(/\.[^/.]+$/, '')) + suffix; }
+
+      // -------- COMPRESSOR logic (advanced)
+      const compQuality = $('#compQuality'), compQualityLabel = $('#compQualityLabel');
+      compQuality && compQuality.addEventListener('input', ()=> compQualityLabel.textContent = compQuality.value);
+
+      $('#compressBtn').addEventListener('click', async ()=>{
+        const f = fileFor('compressor');
+        if(!f) return alert('Select an image (compressor).');
+        const targetKb = parseInt($('#compTargetKb').value) || null;
+        const targetPerc = parseInt($('#compTargetPerc').value) || null;
+        const maxEdge = parseInt($('#compMaxEdge').value) || null;
+        const startQuality = parseFloat(compQuality.value || 0.8);
+
+        $('#compStatus').textContent = 'Compressing...';
+        try{
+          // If user specifically provided target KB, attempt iterative compression until target reached (with safety)
+          if(targetKb){
+            // iterative: reduce quality in steps until blob.size <= targetKb*1024 or quality < 0.2
+            let q = startQuality;
+            let lastGood = null;
+            for(let i=0;i<8;i++){
+              const opts = { initialQuality: q, useWebWorker:true, maxWidthOrHeight: maxEdge || undefined };
+              const blob = await imageCompression(f, opts);
+              const kb = Math.round(blob.size/1024);
+              if(kb <= targetKb){ lastGood = blob; break; }
+              // reduce quality
+              q = q - 0.12;
+              if(q < 0.2) break;
+            }
+            if(lastGood){
+              saveAs(lastGood, changeName(f,'-compressed-'+targetKb+'KB.jpg'));
+              $('#compStatus').textContent = 'Done';
+            } else {
+              // fallback: do one pass with requested quality
+              const b = await imageCompression(f, { initialQuality:startQuality, useWebWorker:true, maxWidthOrHeight:maxEdge || undefined });
+              saveAs(b, changeName(f,'-compressed.jpg'));
+              $('#compStatus').textContent = 'Done (approx)';
+            }
+            return;
+          }
+
+          // If target percentage provided: compute desired size and attempt one pass at adjusted quality
+          if(targetPerc){
+            const desired = Math.max(10, Math.round((100-targetPerc)/100 * f.size)); // rough
+            let q = Math.min(0.95, startQuality * ((desired / f.size) || 1));
+            const b = await imageCompression(f, { initialQuality: q, useWebWorker:true, maxWidthOrHeight:maxEdge || undefined });
+            saveAs(b, changeName(f,'-compressed-'+targetPerc+'pct.jpg'));
+            $('#compStatus').textContent = 'Done';
+            return;
+          }
+
+          // default: single pass with quality slider
+          const blob = await imageCompression(f, { initialQuality:startQuality, useWebWorker:true, maxWidthOrHeight:maxEdge || undefined });
+          saveAs(blob, changeName(f,'-compressed.jpg'));
+          $('#compStatus').textContent = 'Done';
+        }catch(err){
+          console.error(err); alert('Compression failed: '+(err.message||err));
+          $('#compStatus').textContent = 'Error';
+        }
+      });
+
+      // Batch compress: iterate over perTool compressor if you have multiple, else globalFiles
+      $('#compressBatchBtn').addEventListener('click', async ()=>{
+        const files = Array.isArray(perTool['compressor']) ? perTool['compressor'] : (globalFiles.length ? globalFiles : (perTool['compressor'] ? [perTool['compressor']] : []));
+        if(!files.length) return alert('No files for batch compress.');
+        $('#compStatus').textContent = 'Batch running...';
+        for(const f of files){
+          try{
+            const blob = await imageCompression(f, { initialQuality: parseFloat(compQuality.value||0.8), useWebWorker:true });
+            saveAs(blob, changeName(f,'-compressed.jpg'));
+          }catch(e){ console.error('batch err', e); }
+        }
+        $('#compStatus').textContent = 'Batch done';
+      });
+
+      // ---------- RESIZE & ROTATE ----------
+      const rotRange = $('#rotRange'), rotLabel = $('#rotLabel');
+      rotRange && rotRange.addEventListener('input', ()=> rotLabel.textContent = rotRange.value);
+
+      $$('.rotatePreset').forEach(btn => btn.addEventListener('click', (e)=>{
+        const deg = parseInt(e.currentTarget.dataset.rotate);
+        rotRange.value = deg; rotLabel.textContent = deg;
+      }));
+
+      $('#applyResizeBtn').addEventListener('click', async ()=>{
+        const f = fileFor('resize');
+        if(!f) return alert('Select image for resize.');
+        const w = parseInt($('#resizeW').value) || null;
+        const h = parseInt($('#resizeH').value) || null;
+        const keep = $('#keepAspect').checked;
+        const rot = parseInt(rotRange.value) || 0;
+        if(!w && !h && rot===0) return alert('Set width or height or rotate.');
+        try{
+          const dataUrl = await fileToDataURL(f);
+          const img = await createImage(dataUrl);
+          let newW = img.width, newH = img.height;
+          if(w && h){ newW = w; newH = h; }
+          else if(w){ newW = w; newH = keep ? Math.round(img.height*(w/img.width)) : img.height; }
+          else if(h){ newH = h; newW = keep ? Math.round(img.width*(h/img.height)) : img.width; }
+
+          // Rotate handling: compute canvas size for rotated image
+          const rad = rot * Math.PI / 180;
+          const sin = Math.abs(Math.sin(rad)), cos = Math.abs(Math.cos(rad));
+          const cw = Math.round(newW * cos + newH * sin);
+          const ch = Math.round(newW * sin + newH * cos);
+
+          const canvas = document.createElement('canvas'); canvas.width = cw; canvas.height = ch;
+          const ctx = canvas.getContext('2d');
+          ctx.translate(cw/2, ch/2);
+          ctx.rotate(rad);
+          // Draw scaled image centered
+          // create temp canvas for scaled image
+          const tmp = document.createElement('canvas'); tmp.width = newW; tmp.height = newH;
+          tmp.getContext('2d').drawImage(img, 0, 0, newW, newH);
+          ctx.drawImage(tmp, -newW/2, -newH/2);
+
+          canvas.toBlob(blob => saveAs(blob, changeName(f, `-resized-${newW}x${newH}-rot${rot}.jpg`)), 'image/jpeg', 0.92);
+        }catch(e){ console.error(e); alert('Resize failed'); }
+      });
+
+      // ---------- IMAGE -> PDF ----------
+      $('#imgToPdfBtn').addEventListener('click', async ()=>{
+        const files = perTool['imgpdf'] ? (Array.isArray(perTool['imgpdf']) ? perTool['imgpdf'] : [perTool['imgpdf']]) : globalFiles;
+        if(!files || files.length===0) return alert('Select images for PDF.');
+        try{
+          const { jsPDF } = window.jspdf;
+          const orient = $('#pdfOrient').value || 'portrait';
+          const pdf = new jsPDF({ unit:'pt', format:'a4', orientation:orient });
+          for(let i=0;i<files.length;i++){
+            const f = files[i];
+            const dataUrl = await fileToDataURL(f);
+            const img = await createImage(dataUrl);
+            const pageW = pdf.internal.pageSize.getWidth(), pageH = pdf.internal.pageSize.getHeight();
+            const ratio = Math.min(pageW/img.width, pageH/img.height);
+            const imgW = img.width*ratio, imgH = img.height*ratio;
+            pdf.addImage(dataUrl, f.type.includes('png') ? 'PNG' : 'JPEG', (pageW-imgW)/2, (pageH-imgH)/2, imgW, imgH);
+            if(i < files.length-1) pdf.addPage();
+          }
+          pdf.save('images.pdf');
+        }catch(e){ console.error(e); alert('PDF creation failed'); }
+      });
+
+      // ---------- JPG -> PNG & PNG -> JPG ----------
+      $('#jpgToPngBtn').addEventListener('click', async ()=>{
+        const f = fileFor('jpgpng');
+        if(!f) return alert('Select image (JPG → PNG).');
+        try{
+          const dataUrl = await fileToDataURL(f);
+          const img = await createImage(dataUrl);
+          const canvas = document.createElement('canvas'); canvas.width = img.width; canvas.height = img.height;
+          canvas.getContext('2d').drawImage(img,0,0);
+          canvas.toBlob(blob => saveAs(blob, changeName(f, '.png')), 'image/png');
+        }catch(e){ console.error(e); alert('Convert failed'); }
+      });
+
+      $('#pngToJpgBtn').addEventListener('click', async ()=>{
+        const f = fileFor('jpgpng');
+        if(!f) return alert('Select image (PNG → JPG).');
+        try{
+          const q = parseFloat($('#convQuality').value || 0.9);
+          const dataUrl = await fileToDataURL(f);
+          const img = await createImage(dataUrl);
+          const canvas = document.createElement('canvas'); canvas.width = img.width; canvas.height = img.height;
+          const ctx = canvas.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0,0,canvas.width,canvas.height);
+          ctx.drawImage(img,0,0);
+          canvas.toBlob(blob => saveAs(blob, changeName(f, '.jpg')), 'image/jpeg', q);
+        }catch(e){ console.error(e); alert('Convert failed'); }
+      });
+
+      // Save helper (uses FileSaver if available)
+      function saveAs(blob, filename){
+        try{
+          if(window.saveAs) { window.saveAs(blob, filename); return; }
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = filename;
+          document.body.appendChild(a); a.click(); a.remove();
+          setTimeout(()=> URL.revokeObjectURL(a.href), 1500);
+        }catch(e){ console.error('save failed', e); alert('Save failed'); }
+      }
+
+      // Keyboard shortcuts: Ctrl+O -> open global dialog; Ctrl+S -> hint
+      document.addEventListener('keydown', (e)=>{
+        if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'o'){ e.preventDefault(); globalFileInput.click(); }
+        if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's'){ e.preventDefault(); alert('Use the tool-specific Export/Save button to save files.'); }
+      });
+
+      // Small init: set default empty previews
+      ['compressor','resize','imgpdf','jpgpng'].forEach(t => renderToolPreview(t));
+    })();
+  </script>
+</body>
+</html>
