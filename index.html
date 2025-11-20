@@ -480,3 +480,240 @@
           <small class="small-muted d-block mt-2">// API OPTION - requires key (store keys on server-side only)</small>
         </div>
       </div>
+<!-- PART 4/5: TEXT EXTRACTION, METADATA, COLOR, GIF/VIDEO, BATCH TOOLS -->
+
+      <h3 class="mt-4 mb-2 fw-bold">TEXT & EXTRACTION TOOLS</h3>
+
+      <!-- OCR (Tesseract.js) -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" aria-labelledby="ocrTitle">
+          <div id="ocrTitle" class="tool-header">
+            <i class="bi bi-text-paragraph tool-icon"></i>
+            <h5 class="mb-0">OCR — Extract Text (Tesseract.js)</h5>
+          </div>
+          <p class="small-muted">Client-side OCR using WASM. Supports English / Hindi.</p>
+
+          <label class="form-label">Language</label>
+          <select id="ocrLang" class="form-select form-select-sm mb-2">
+            <option value="eng" selected>English</option>
+            <option value="hin">Hindi</option>
+          </select>
+
+          <button id="runOcrBtn" class="btn btn-outline-primary btn-sm">Run OCR</button>
+
+          <textarea id="ocrOutput" class="form-control mt-2" rows="5" placeholder="Extracted text will appear here..."></textarea>
+        </div>
+      </div>
+
+      <!-- Image → Searchable PDF -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" aria-labelledby="searchablePdfTitle">
+          <div id="searchablePdfTitle" class="tool-header">
+            <i class="bi bi-filetype-pdf tool-icon"></i>
+            <h5 class="mb-0">Image → Searchable PDF</h5>
+          </div>
+          <p class="small-muted">Embed OCR text layer on top of image to create searchable PDF.</p>
+          <button id="imageToSearchablePdfBtn" class="btn btn-outline-primary btn-sm">Create PDF</button>
+        </div>
+      </div>
+
+      <!-- PDF → Image (PDF.js) -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" aria-labelledby="pdf2imgTitle">
+          <div id="pdf2imgTitle" class="tool-header">
+            <i class="bi bi-file-pdf tool-icon"></i>
+            <h5 class="mb-0">PDF → Image</h5>
+          </div>
+          <p class="small-muted">Convert each PDF page to PNG/JPEG using PDF.js.</p>
+          <button id="pdfToImgBtn" class="btn btn-outline-primary btn-sm">Convert PDF</button>
+        </div>
+      </div>
+
+
+      <!-- PRIVACY & METADATA TOOLS -->
+      <h3 class="mt-4 mb-2 fw-bold">PRIVACY & METADATA TOOLS</h3>
+
+      <!-- EXIF Viewer -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" aria-labelledby="exifViewTitle">
+          <div id="exifViewTitle" class="tool-header">
+            <i class="bi bi-info-circle tool-icon"></i>
+            <h5 class="mb-0">EXIF Viewer</h5>
+          </div>
+          <p class="small-muted">View hidden metadata (camera info, timestamps, GPS tags).</p>
+          <button id="exifViewBtn" class="btn btn-outline-secondary btn-sm">Show EXIF</button>
+          <pre id="exifOutput" class="mt-2 small" style="white-space: pre-wrap;"></pre>
+        </div>
+      </div>
+
+      <!-- EXIF Remover -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" aria-labelledby="exifRemoveTitle">
+          <div id="exifRemoveTitle" class="tool-header">
+            <i class="bi bi-shield-x tool-icon"></i>
+            <h5 class="mb-0">EXIF Remover</h5>
+          </div>
+          <p class="small-muted">Strip EXIF metadata including camera and GPS info.</p>
+          <button id="exifStripBtn" class="btn btn-outline-danger btn-sm">Remove EXIF</button>
+        </div>
+      </div>
+
+
+      <!-- COMPOSITION & BRANDING -->
+      <h3 class="mt-4 mb-2 fw-bold">COMPOSITION & BRANDING</h3>
+
+      <!-- Watermark -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" aria-labelledby="watermarkTitle">
+          <div id="watermarkTitle" class="tool-header">
+            <i class="bi bi-brush tool-icon"></i>
+            <h5 class="mb-0">Watermark (Text / Image)</h5>
+          </div>
+          <p class="small-muted">Add watermark text or overlay an image watermark.</p>
+
+          <label class="form-label">Watermark Text</label>
+          <input id="wmText" type="text" class="form-control mb-2" placeholder="Your watermark...">
+
+          <label class="form-label">Text Size</label>
+          <input id="wmSize" type="number" class="form-control form-control-sm mb-2" value="32">
+
+          <div class="d-flex gap-2">
+            <button id="wmApplyTextBtn" class="btn btn-outline-primary btn-sm">Apply Text</button>
+            <button id="wmApplyImageBtn" class="btn btn-outline-primary btn-sm">Apply Image</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Green-screen / Chroma-key -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" aria-labelledby="chromaTitle">
+          <div id="chromaTitle" class="tool-header">
+            <i class="bi bi-camera-reels tool-icon"></i>
+            <h5 class="mb-0">Green Screen (Chroma Key)</h5>
+          </div>
+          <p class="small-muted">Remove a green background using threshold-based chroma-key.</p>
+
+          <label class="form-label">Color tolerance</label>
+          <input id="chromaTolerance" type="range" class="form-range" min="10" max="100" step="5" value="40">
+
+          <button id="applyChromaBtn" class="btn btn-outline-primary btn-sm mt-2">Apply</button>
+        </div>
+      </div>
+
+
+      <!-- COLOUR & DESIGN -->
+      <h3 class="mt-4 mb-2 fw-bold">COLOUR & DESIGN TOOLS</h3>
+
+      <!-- Color Palette Extractor -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" aria-labelledby="paletteTitle">
+          <div id="paletteTitle" class="tool-header">
+            <i class="bi bi-palette-fill tool-icon"></i>
+            <h5 class="mb-0">Color Palette Extractor</h5>
+          </div>
+          <p class="small-muted">Extract most dominant colors (Color Thief).</p>
+
+          <button id="extractPaletteBtn" class="btn btn-outline-primary btn-sm">Extract Palette</button>
+
+          <div id="palettePreview" class="d-flex gap-2 mt-2"></div>
+        </div>
+      </div>
+
+      <!-- Color Picker from Image -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" aria-labelledby="colorPickTitle">
+          <div id="colorPickTitle" class="tool-header">
+            <i class="bi bi-eyedropper tool-icon"></i>
+            <h5 class="mb-0">Image Color Picker</h5>
+          </div>
+          <p class="small-muted">Click any point on the image to get RGB / HEX.</p>
+
+          <button id="pickColorBtn" class="btn btn-outline-primary btn-sm">Pick Color</button>
+          <div id="pickedColorBox" class="mt-2 p-2 border rounded small-muted">No color picked</div>
+        </div>
+      </div>
+
+      <!-- Filters & Adjustments -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" aria-labelledby="filtersTitle">
+          <div id="filtersTitle" class="tool-header">
+            <i class="bi bi-sliders tool-icon"></i>
+            <h5 class="mb-0">Filters & Adjustments</h5>
+          </div>
+          <p class="small-muted">Brightness, contrast, saturation, gamma.</p>
+
+          <label class="form-label">Brightness</label>
+          <input id="brightRange" type="range" min="0" max="200" value="100" class="form-range">
+
+          <label class="form-label">Contrast</label>
+          <input id="contrastRange" type="range" min="50" max="200" value="100" class="form-range">
+
+          <label class="form-label">Saturation</label>
+          <input id="satRange" type="range" min="0" max="200" value="100" class="form-range">
+
+          <label class="form-label">Gamma</label>
+          <input id="gammaRange" type="range" min="50" max="200" value="100" class="form-range">
+
+          <button id="applyFiltersBtn" class="btn btn-outline-primary btn-sm mt-2">Apply Filters</button>
+        </div>
+      </div>
+
+
+      <!-- GIF & VIDEO TOOLS -->
+      <h3 class="mt-4 mb-2 fw-bold">GIF & VIDEO TOOLS</h3>
+
+      <!-- GIF → Frames -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" aria-labelledby="gifFramesTitle">
+          <div id="gifFramesTitle" class="tool-header">
+            <i class="bi bi-film tool-icon"></i>
+            <h5 class="mb-0">GIF → Frames</h5>
+          </div>
+          <p class="small-muted">Extract all frames from a GIF (client-side).</p>
+          <button id="gifToFramesBtn" class="btn btn-outline-primary btn-sm">Extract Frames</button>
+        </div>
+      </div>
+
+      <!-- Frames → GIF -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" aria-labelledby="framesGifTitle">
+          <div id="framesGifTitle" class="tool-header">
+            <i class="bi bi-arrow-repeat tool-icon"></i>
+            <h5 class="mb-0">Frames → GIF</h5>
+          </div>
+          <p class="small-muted">Combine frames into a GIF (GIF encoder JS).</p>
+          <button id="framesToGifBtn" class="btn btn-outline-primary btn-sm">Generate GIF</button>
+        </div>
+      </div>
+
+      <!-- GIF → MP4 (API/ffmpeg wasm) -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" aria-labelledby="gifMp4Title">
+          <div id="gifMp4Title" class="tool-header">
+            <i class="bi bi-play-btn-fill tool-icon"></i>
+            <h5 class="mb-0">GIF → MP4</h5>
+          </div>
+          <p class="small-muted">Use ffmpeg.wasm or server API for conversion.</p>
+          <div class="d-flex gap-2">
+            <button id="gifToMp4ClientBtn" class="btn btn-outline-primary btn-sm">Client (wasm)</button>
+            <button id="gifToMp4ApiBtn" class="btn btn-warning btn-sm">API</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video → GIF -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" aria-labelledby="videoGifTitle">
+          <div id="videoGifTitle" class="tool-header">
+            <i class="bi bi-camera-video tool-icon"></i>
+            <h5 class="mb-0">Video → GIF</h5>
+          </div>
+          <p class="small-muted">Convert a short video to GIF (client-side heavy).</p>
+          <div class="d-flex gap-2">
+            <button id="videoToGifClientBtn" class="btn btn-outline-primary btn-sm">Client</button>
+            <button id="videoToGifApiBtn" class="btn btn-warning btn-sm">API</button>
+          </div>
+        </div>
+      </div>
+
+<!-- END OF PART 4/5 -->
