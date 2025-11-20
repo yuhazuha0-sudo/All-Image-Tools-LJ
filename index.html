@@ -59,21 +59,96 @@
       padding: 1.5rem 0 3.5rem;
     }
     .tool-card{ border-radius:var(--card-radius); background:var(--card); box-shadow:0 6px 18px rgba(13,110,253,0.06); }
-   header .brand{
-  font-weight:700;
-  font-size:2.2rem;  /* ← Yeh value title ko bada karta hai */
-  background:linear-gradient(90deg,#0d6efd,#6610f2);
-  -webkit-background-clip:text;
-  color:transparent;
-  line-height:1.1;
+   /* ---------- Header card, alignment, shadow & blur ---------- */
+.header-card {
+  background: rgba(255,255,255,0.80);                 /* light card */
+  backdrop-filter: blur(6px) saturate(110%);          /* subtle blur */
+  -webkit-backdrop-filter: blur(6px) saturate(110%);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(13,110,253,0.08);
+  padding: 14px 18px;
+  margin: 0 auto 18px;
+  max-width: 1100px;
+  border: 1px solid rgba(13,110,253,0.04);
 }
-  .tool-logo{
-  width:55px;
-  height:55px;
+
+/* Layout inside card */
+.header-row {
+  display:flex;
+  align-items:center;         /* vertical center */
+  gap: 12px;
+  justify-content: space-between;
+}
+
+/* Left group (logo + title) */
+.header-left {
+  display:flex;
+  align-items:center;
+  gap: 12px;
+}
+
+/* Logo (bigger + crisp) */
+.tool-logo{
+  width:70px;    /* new default — change if you want */
+  height:70px;
   object-fit:contain;
-  margin-right:.5rem;
-  border-radius:10px;
+  border-radius:12px;
+  display:block;
+  flex-shrink:0;
+  box-shadow: 0 6px 20px rgba(13,110,253,0.08);
 }
+
+/* Brand title — responsive & clamped */
+header .brand{
+  font-weight:800;
+  font-size: clamp(1.4rem, 3.6vw, 2.4rem); /* responsive: min 1.4rem, preferred via vw, max 2.4rem */
+  line-height:1;
+  margin:0;
+  letter-spacing: -0.5px;
+  /* smoother gradient */
+  background: linear-gradient(90deg, #0d6efd 0%, #6f42c1 45%, #ff6b6b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-wrap: balance;
+}
+
+/* Tagline under the brand */
+.header-tagline {
+  font-size: 0.98rem;
+  color: var(--muted, #6c757d);
+  margin-top:4px;
+  font-weight:500;
+}
+
+/* Right group (controls/buttons) */
+.header-right {
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+/* Small responsive tweaks */
+@media (max-width:680px){
+  .header-row { flex-direction:column; align-items:center; gap:10px; }
+  .header-right { order:3; width:100%; justify-content:center; }
+  .header-left { justify-content:center; text-align:center; }
+  .tool-logo { width:56px; height:56px; }
+  header .brand { font-size: 1.5rem; }
+  .header-card { padding:12px; margin-bottom:12px; }
+}
+
+/* Large screens: slightly larger logo/title */
+@media (min-width:1200px){
+  .tool-logo { width:86px; height:86px; }
+  header .brand { font-size: clamp(1.6rem, 2.6vw, 2.8rem); }
+}
+
+/* optional: subtle hover lift for the header card */
+.header-card:hover {
+  transform: translateY(-3px);
+  transition: transform .18s ease;
+    }
     .btn-tool{ background:var(--accent); color:#fff; border:none; box-shadow:0 6px 18px rgba(255,107,107,0.12); }
     .small-muted{ color:var(--muted); }
     .tool-local-preview img{ max-height:140px; display:block; margin:auto; }
