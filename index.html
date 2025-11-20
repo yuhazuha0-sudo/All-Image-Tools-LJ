@@ -301,3 +301,182 @@
           <button id="rasterToSvgBtn" class="btn btn-outline-primary btn-sm">Trace to SVG</button>
         </div>
       </div>
+
+      <h3 class="mt-4 mb-2 fw-bold">COMPRESSION & OPTIMISATION</h3>
+
+      <!-- Image Compressor (expanded card) -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" role="region" aria-labelledby="compressorTitle2">
+          <div id="compressorTitle2" class="tool-header">
+            <i class="bi bi-speedometer2 tool-icon" aria-hidden="true"></i>
+            <h5 class="mb-0">Image Compressor (advanced)</h5>
+          </div>
+          <p class="small-muted">Adjust quality, resize on save, use web-worker compression (browser-image-compression).</p>
+          <label class="form-label">Target quality: <span id="qualityLabel2">0.8</span></label>
+          <input id="qualityRange2" type="range" min="0.05" max="1" step="0.05" value="0.8" class="form-range mb-2">
+          <div class="mb-2">
+            <label class="form-label small-muted">Resize long edge to (px, optional)</label>
+            <input id="compressMaxEdge" type="number" class="form-control form-control-sm" placeholder="e.g. 1600">
+          </div>
+          <div class="d-flex gap-2">
+            <button id="compressRunBtn" class="btn btn-primary btn-sm">Compress Selected</button>
+            <button id="compressBatchBtn" class="btn btn-outline-primary btn-sm">Compress All (Batch)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progressive JPEG / Presets -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" role="region" aria-labelledby="progJpegTitle">
+          <div id="progJpegTitle" class="tool-header">
+            <i class="bi bi-image-fill tool-icon" aria-hidden="true"></i>
+            <h5 class="mb-0">Progressive JPEG & Presets</h5>
+          </div>
+          <p class="small-muted">Produce progressive JPEGs and preset profiles for Web / Social / Print.</p>
+          <select id="presetSelect" class="form-select form-select-sm mb-2" aria-label="Presets">
+            <option value="web" selected>Web (small)</option>
+            <option value="social">Social (medium)</option>
+            <option value="print">Print (high quality)</option>
+          </select>
+          <div class="d-flex gap-2">
+            <button id="makeProgressiveBtn" class="btn btn-outline-secondary btn-sm">Make Progressive</button>
+            <button id="applyPresetBtn" class="btn btn-outline-secondary btn-sm">Apply Preset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Convert to WebP (presets) -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" role="region" aria-labelledby="webpPresetsTitle">
+          <div id="webpPresetsTitle" class="tool-header">
+            <i class="bi bi-box-seam tool-icon" aria-hidden="true"></i>
+            <h5 class="mb-0">Convert to WebP (presets)</h5>
+          </div>
+          <p class="small-muted">One-click conversions targeted for web, social, or print.</p>
+          <div class="d-flex gap-2">
+            <button id="webpWebBtn" class="btn btn-outline-primary btn-sm">Web</button>
+            <button id="webpSocialBtn" class="btn btn-outline-primary btn-sm">Social</button>
+            <button id="webpPrintBtn" class="btn btn-outline-primary btn-sm">Print</button>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="mt-4 mb-2 fw-bold">BASIC EDITING TOOLS</h3>
+
+      <!-- Crop (Cropper.js will be wired in JS part) -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" role="region" aria-labelledby="cropTitle">
+          <div id="cropTitle" class="tool-header">
+            <i class="bi bi-crop tool-icon" aria-hidden="true"></i>
+            <h5 class="mb-0">Crop (interactive)</h5>
+          </div>
+          <p class="small-muted">Open interactive cropper, choose aspect ratio presets or free crop.</p>
+          <div class="mb-2">
+            <select id="cropRatio" class="form-select form-select-sm" aria-label="Crop ratio">
+              <option value="free" selected>Free</option>
+              <option value="1:1">1:1 (Square)</option>
+              <option value="16:9">16:9</option>
+              <option value="4:3">4:3</option>
+            </select>
+          </div>
+          <div class="d-flex gap-2">
+            <button id="openCropperBtn" class="btn btn-outline-secondary btn-sm">Open Cropper</button>
+            <button id="applyCropBtn" class="btn btn-success btn-sm">Apply Crop</button>
+          </div>
+          <p class="small-muted mt-2">Keyboard: use arrow keys to nudge selection, Enter to apply.</p>
+        </div>
+      </div>
+
+      <!-- Rotate / Flip / Arbitrary rotate -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" role="region" aria-labelledby="rotateFlipTitle">
+          <div id="rotateFlipTitle" class="tool-header">
+            <i class="bi bi-arrow-clockwise tool-icon" aria-hidden="true"></i>
+            <h5 class="mb-0">Rotate / Flip / Arbitrary Rotate</h5>
+          </div>
+          <p class="small-muted">Quick rotate/flip and arbitrary rotation slider.</p>
+          <div class="mb-2">
+            <button id="flipHBtn" class="btn btn-outline-secondary btn-sm">Flip Horizontal</button>
+            <button id="flipVBtn" class="btn btn-outline-secondary btn-sm">Flip Vertical</button>
+          </div>
+          <label class="form-label">Rotate degrees: <span id="rotDegLabel">0</span>°</label>
+          <input id="rotDegRange" type="range" min="-180" max="180" step="1" value="0" class="form-range mb-2">
+          <div class="d-flex gap-2">
+            <button id="applyArbRotateBtn" class="btn btn-success btn-sm">Apply Rotation</button>
+            <button id="resetTransformsBtn" class="btn btn-outline-secondary btn-sm">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="mt-4 mb-2 fw-bold">ADVANCED EDITING & AI TOOLS</h3>
+
+      <!-- Background Remover (client-side + API option) -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" role="region" aria-labelledby="bgRemoveTitle">
+          <div id="bgRemoveTitle" class="tool-header">
+            <i class="bi bi-scissors tool-icon" aria-hidden="true"></i>
+            <h5 class="mb-0">Background Remover</h5>
+          </div>
+          <p class="small-muted">Client-side (BodyPix/U^2-Net) demo for simple images. For robust results use Server API (opt-in).</p>
+          <div class="mb-2">
+            <button id="bgRemoveClientBtn" class="btn btn-outline-primary btn-sm">Remove BG (Client)</button>
+            <button id="bgRemoveApiBtn" class="btn btn-warning btn-sm">Remove BG (API)</button>
+          </div>
+          <small class="small-muted d-block mt-2">// API OPTION - requires key — implement server proxy to hide keys.</small>
+        </div>
+      </div>
+
+      <!-- Background Replace -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" role="region" aria-labelledby="bgReplaceTitle">
+          <div id="bgReplaceTitle" class="tool-header">
+            <i class="bi bi-paint-bucket tool-icon" aria-hidden="true"></i>
+            <h5 class="mb-0">Background Replace</h5>
+          </div>
+          <p class="small-muted">Replace transparent background with color or another image.</p>
+          <div class="mb-2">
+            <input id="bgColorPicker" type="color" class="form-control form-control-sm" value="#ffffff" aria-label="Background color">
+          </div>
+          <div class="d-flex gap-2">
+            <button id="bgReplaceColorBtn" class="btn btn-outline-secondary btn-sm">Replace with Color</button>
+            <button id="bgReplaceImageBtn" class="btn btn-outline-secondary btn-sm">Replace with Image</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Face Blur (auto-detect + blur) -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" role="region" aria-labelledby="faceBlurTitle">
+          <div id="faceBlurTitle" class="tool-header">
+            <i class="bi bi-emoji-smile-fill tool-icon" aria-hidden="true"></i>
+            <h5 class="mb-0">Face Blur</h5>
+          </div>
+          <p class="small-muted">Detect faces (face-api / blur filter). Works client-side for small images.</p>
+          <label class="form-label">Blur amount</label>
+          <input id="faceBlurRange" type="range" min="1" max="30" step="1" value="8" class="form-range mb-2">
+          <div class="d-flex gap-2">
+            <button id="faceBlurBtn" class="btn btn-outline-secondary btn-sm">Auto Blur Faces</button>
+            <button id="faceAnnotateBtn" class="btn btn-outline-secondary btn-sm">Annotate Faces</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Enhance (client filters + API option) -->
+      <div class="col-md-6">
+        <div class="card p-3 tool-card h-100" role="region" aria-labelledby="aiEnhanceTitle">
+          <div id="aiEnhanceTitle" class="tool-header">
+            <i class="bi bi-stars tool-icon" aria-hidden="true"></i>
+            <h5 class="mb-0">AI Enhance (Sharpen / Denoise)</h5>
+          </div>
+          <p class="small-muted">Client-side filters (unsharp mask, denoise) for minor improvements. For heavy upscaling use API.</p>
+          <div class="d-flex gap-2 mb-2">
+            <button id="sharpenBtn" class="btn btn-outline-secondary btn-sm">Sharpen</button>
+            <button id="denoiseBtn" class="btn btn-outline-secondary btn-sm">Denoise</button>
+          </div>
+          <div class="d-flex gap-2">
+            <button id="aiEnhanceApiBtn" class="btn btn-warning btn-sm">Enhance (API)</button>
+            <button id="aiEnhanceClientBtn" class="btn btn-outline-primary btn-sm">Enhance (Client)</button>
+          </div>
+          <small class="small-muted d-block mt-2">// API OPTION - requires key (store keys on server-side only)</small>
+        </div>
+      </div>
