@@ -540,26 +540,26 @@
     })();
   </script>
 
-  <!-- Typing animation for document.title (paste before </body>) -->
 <script>
 (function(){
-  const titles = ["All Image Tools — Free Online Image Compressor"]; // you can add more items to loop
-  const fullTitle = titles[0];
-  let i = 0;
-  let charIndex = 0;
-  const typingSpeed = 80; // ms per character
-  const startDelay = 300; // ms before typing starts
+  const finalTitle = "All Image Tools — Free Online Image Compressor";
+  let index = 0;
 
-  function typeOnce() {
-    if (charIndex <= fullTitle.length) {
-      document.title = fullTitle.slice(0, charIndex);
-      charIndex++;
-      setTimeout(typeOnce, typingSpeed);
+  function type() {
+    if (index <= finalTitle.length) {
+      document.title = finalTitle.substring(0, index);
+      index++;
+      setTimeout(type, 90); 
     }
   }
 
-  // optional: start after a small delay so page shows up first
-  setTimeout(typeOnce, startDelay);
+  // Mobile browsers don't allow immediate title update,
+  // so start only after everything is loaded.
+  window.addEventListener("load", function() {
+    // Ensure title starts empty
+    document.title = "";
+    setTimeout(type, 300);  
+  });
 })();
 </script>
 </body>
