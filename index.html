@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>All Image Tools — Superfast Tools</title>
+
+  <meta name="description" content="Selected popular image tools: Compressor, Resize & Rotate, Image → PDF, JPG → PNG. Privacy-first — client-side processing." />
+  <meta name="theme-color" content="#0d6efd">
+
+  <link rel="canonical" href="https://yuhazuha0-sudo.github.io/All-Image-Tools/" />
+  <link rel="manifest" href="/All-Image-Tools/manifest.json?v=1">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="/All-Image-Tools/icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/All-Image-Tools/icons/icon-512.png">
+  <link rel="shortcut icon" href="/All-Image-Tools/icons/icon-192.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/All-Image-Tools/icons/icon-192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="/All-Image-Tools/icons/icon-512.png">
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#f6f9ff; --card:#fff; --text:#222; --muted:#6c757d;
+      --brand:#0d6efd;
+      --accent: linear-gradient(90deg,#ff6b6b,#ffb86b);
+      --card-radius:.8rem;
+    }
+    body{
+      background:var(--bg); color:var(--text); font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      padding: 1.5rem 0 3.5rem;
+    }
+    .tool-card{ border-radius:var(--card-radius); background:var(--card); box-shadow:0 8px 22px rgba(13,110,253,0.06); }
+    header { max-width:1100px; margin:0 auto 18px; padding: 10px; }
+    .header-inner {
+      display:flex; align-items:center; gap:14px; justify-content:space-between;
+      background:rgba(255,255,255,0.95); padding:12px 16px; border-radius:14px; box-shadow:0 8px 24px rgba(13,110,253,0.06);
+    }
+    .brand-row{ display:flex; align-items:center; gap:12px; flex:1; }
+    .tool-logo { width:92px; height:92px; border-radius:12px; object-fit:contain; box-shadow:0 8px 26px rgba(13,110,253,0.06); flex-shrink:0; }
+    .brand-title { font-weight:900; font-size:2.1rem; margin:0; background: linear-gradient(90deg, #0d6efd 0%, #6f42c1 45%, #ff6b6b 100%); -webkit-background-clip:text; color:transparent; }
+    .brand-sub { font-size:1rem; color:var(--muted); margin-top:6px; font-weight:600; }
+
+    .header-actions { display:flex; gap:8px; align-items:center; }
+
+    /* Featured templates area */
+    .featured { max-width:1100px; margin:0 auto 18px; display:flex; gap:12px; align-items:stretch; }
+    .featured-card { flex:1; background:#fff; padding:18px; border-radius:12px; box-shadow:0 8px 20px rgba(13,110,253,0.04); display:flex; gap:12px; align-items:center; }
+    .featured-thumb { width:160px; height:110px; object-fit:cover; border-radius:8px; flex-shrink:0; box-shadow:0 6px 16px rgba(13,110,253,0.05); }
+    .featured-meta { flex:1; }
+    .featured-meta h4 { margin:0; font-size:1.05rem; }
+    .featured-meta p { margin:.35rem 0 0 0; color:var(--muted); }
+
+    /* Tools area */
+    .tools-wrap { max-width:1100px; margin:0 auto; }
+
+    .tool-header { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+    .tool-header h5 { font-size:1.25rem; margin:0; font-weight:800; }
+    .tool-badge { font-size:.85rem; color:var(--muted); margin-left:auto; }
+
+    .tool-file { display:flex; gap:8px; align-items:center; margin-bottom:8px; width:100%; }
+    .tool-file input[type="file"] { display:none; }
+    .file-btn { padding:.45rem .8rem; border-radius:.55rem; border:1px dashed rgba(13,110,253,0.12); background:#fafafa; cursor:pointer; display:inline-flex; align-items:center; gap:.5rem; }
+    .thumb-preview { max-height:84px; border-radius:8px; display:inline-block; margin-right:6px; }
+
+    .action-group { display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; }
+
+    .download-link { padding:.35rem .6rem; background:#198754; color:#fff; border-radius:.5rem; text-decoration:none; font-weight:600; display:inline-flex; gap:6px; align-items:center; }
+
+    .small-muted{ color:var(--muted); }
+
+    .card .form-label { margin-bottom:.25rem; font-weight:600; color:#444; }
+    .card .mb-2 { margin-bottom:.6rem !important; }
+    .card.p-3.tool-card { min-height:0; height:auto; }
+
+    /* give each tool a subtle colored left border (professional grouping) */
+    .tool-card { border-left:6px solid rgba(13,110,253,0.08); padding-left:14px; }
+
+    @media (max-width:680px){
+      .header-inner { flex-direction:column; align-items:center; text-align:center; gap:8px; }
+      .brand-row { justify-content:center; }
+      .brand-title{ font-size:1.5rem; }
+      .tool-logo { width:72px; height:72px; }
+      .featured { flex-direction:column; }
+      .featured-thumb { width:100%; height:160px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+
+    <!-- Header -->
+    <header>
+      <div class="header-inner">
+        <div class="brand-row">
+          <img class="tool-logo" alt="All Image Tools" src="/All-Image-Tools/icons/icon-192.png"
+               onerror="this.onerror=null;this.src='/All-Image-Tools/icons/icon-512.png?v=2'">
+          <div>
+            <div class="brand-title">All Image Tools</div>
+            <div class="brand-sub">Superfast Tools</div>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button id="globalOpenBtn" class="btn btn-outline-primary btn-sm me-1"><i class="bi bi-folder2-open"></i> Open</button>
+          <button id="helpBtn" class="btn btn-outline-secondary btn-sm">Help</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Featured Templates / Attractive Interface (replaces drag & drop) -->
+    <section class="featured mb-3">
+      <div class="featured-card">
+        <img src="/All-Image-Tools/featured/sample1.jpg" alt="Featured template" class="featured-thumb" id="featuredThumb" onerror="this.onerror=null; this.src='/All-Image-Tools/icons/icon-512.png';">
+        <div class="featured-meta">
+          <h4>Featured: Clean Social Post</h4>
+          <p class="small-muted">Use this sample image to test tools quickly. Click "Use this image" or use Upload to select your own.</p>
+          <div class="mt-2">
+            <button id="useFeaturedBtn" class="btn btn-tool btn-sm"><i class="bi bi-image"></i> Use this image</button>
+            <label class="file-btn ms-2" for="featuredUpload"><i class="bi bi-cloud-arrow-up"></i> Upload</label>
+            <input id="featuredUpload" type="file" accept="image/*" style="display:none">
+          </div>
+        </div>
+      </div>
+      <!-- optional second small tile showing templates -->
+      <div class="featured-card" style="max-width:320px; flex-shrink:0; flex-direction:column; align-items:flex-start;">
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <img src="/All-Image-Tools/featured/sample2.jpg" class="featured-thumb" style="width:100px;height:70px;cursor:pointer" alt="t1" onclick="selectFeatured('/All-Image-Tools/featured/sample2.jpg')">
+          <img src="/All-Image-Tools/featured/sample3.jpg" class="featured-thumb" style="width:100px;height:70px;cursor:pointer" alt="t2" onclick="selectFeatured('/All-Image-Tools/featured/sample3.jpg')">
+          <img src="/All-Image-Tools/featured/sample4.jpg" class="featured-thumb" style="width:100px;height:70px;cursor:pointer" alt="t3" onclick="selectFeatured('/All-Image-Tools/featured/sample4.jpg')">
+        </div>
+        <div class="small-muted mt-2">Click a template to preview</div>
+      </div>
+    </section>
+
+    <!-- Tools -->
+    <section class="tools-wrap">
+      <div class="row g-3">
+
+        <!-- 1) Image Compressor -->
+        <div class="col-md-6">
+          <div class="card p-3 tool-card" id="card-compressor">
+            <div class="tool-header">
+              <img src="icons/compressor.png" class="tool-logo" style="width:46px;height:46px;box-shadow:none" onerror="this.style.display='none'">
+              <h5>Image Compressor</h5>
+              <div class="tool-badge">Reduce size</div>
+            </div>
+            <p class="small-muted">Adjust quality, set target KB/percent, or batch compress.</p>
+
+            <div class="tool-file">
+              <label class="file-btn" for="compFileBtn"><i class="bi bi-image"></i> Choose image</label>
+              <input id="compFileBtn" type="file" accept="image/*" class="tool-input" data-tool="compressor">
+              <div id="compPreview" class="ms-2"></div>
+              <button id="compClear" class="btn btn-sm btn-outline-secondary ms-auto" style="display:none">Clear</button>
+            </div>
+
+            <label class="form-label">Target size (KB) — leave empty if not needed</label>
+            <input id="compTargetKb" type="number" class="form-control form-control-sm mb-2" placeholder="e.g. 150">
+
+            <label class="form-label">Target reduction (%) — leave empty if not needed</label>
+            <input id="compTargetPerc" type="number" class="form-control form-control-sm mb-2" placeholder="e.g. 60">
+
+            <label class="form-label">Quality (0.1 - 1.0) <small id="compQualityLabel">0.8</small></label>
+            <input id="compQuality" type="range" min="0.1" max="1" step="0.01" value="0.8" class="form-range mb-2">
+
+            <label class="form-label">Max long-edge (px) — optional</label>
+            <input id="compMaxEdge" type="number" class="form-control form-control-sm mb-2" placeholder="e.g. 1600">
+
+            <div class="action-group">
+              <button id="compressBtn" class="btn btn-tool"><i class="bi bi-filter-circle"></i> Compress</button>
+              <button id="compressBatchBtn" class="btn btn-outline-primary" title="Compress multiple files">Compress Batch</button>
+              <a id="compDownload" class="download-link" style="display:none"><i class="bi bi-download"></i> Download</a>
+              <span id="compStatus" class="small-muted align-self-center">Ready</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2) Resize & Rotate -->
+        <div class="col-md-6">
+          <div class="card p-3 tool-card" id="card-resize">
+            <div class="tool-header">
+              <img src="icons/resize.png" class="tool-logo" style="width:46px;height:46px;box-shadow:none" onerror="this.style.display='none'">
+              <h5>Resize & Rotate</h5>
+              <div class="tool-badge">Change dimensions & rotate</div>
+            </div>
+            <p class="small-muted">Preserve aspect ratio, rotate with presets or slider.</p>
+
+            <div class="tool-file">
+              <label class="file-btn" for="resizeFileBtn"><i class="bi bi-image"></i> Choose image</label>
+              <input id="resizeFileBtn" type="file" accept="image/*" class="tool-input" data-tool="resize">
+              <div id="resizePreview" class="ms-2"></div>
+              <button id="resizeClear" class="btn btn-sm btn-outline-secondary ms-auto" style="display:none">Clear</button>
+            </div>
+
+            <div class="row g-2 mb-2">
+              <div class="col">
+                <label class="form-label">Width (px)</label>
+                <input id="resizeW" type="number" class="form-control form-control-sm" placeholder="e.g. 1200">
+              </div>
+              <div class="col">
+                <label class="form-label">Height (px)</label>
+                <input id="resizeH" type="number" class="form-control form-control-sm" placeholder="e.g. 800">
+              </div>
+            </div>
+
+            <div class="form-check form-switch mb-2">
+              <input class="form-check-input" type="checkbox" id="keepAspect" checked>
+              <label class="form-check-label small-muted" for="keepAspect">Preserve aspect ratio</label>
+            </div>
+
+            <label class="form-label">Rotate degrees: <span id="rotLabel">0</span>°</label>
+            <input id="rotRange" type="range" min="-180" max="180" value="0" class="form-range mb-2">
+
+            <div class="d-flex gap-2 mb-2 rotate-controls">
+              <button data-rotate="-90" class="rotatePreset btn btn-outline-secondary">⟲ -90°</button>
+              <button data-rotate="90" class="rotatePreset btn btn-outline-secondary">⟳ 90°</button>
+              <button data-rotate="180" class="rotatePreset btn btn-outline-secondary">180°</button>
+            </div>
+
+            <div class="action-group">
+              <button id="applyResizeBtn" class="btn btn-tool"><i class="bi bi-arrows-angle-contract"></i> Apply</button>
+              <a id="resizeDownload" class="download-link" style="display:none"><i class="bi bi-download"></i> Download</a>
+              <span id="resizeStatus" class="small-muted align-self-center">Ready</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3) Image → PDF (multi-page) -->
+        <div class="col-md-6">
+          <div class="card p-3 tool-card" id="card-pdf">
+            <div class="tool-header">
+              <img src="icons/pdf.png" class="tool-logo" style="width:46px;height:46px;box-shadow:none" onerror="this.style.display='none'">
+              <h5>Image → PDF</h5>
+              <div class="tool-badge">Multiple images</div>
+            </div>
+            <p class="small-muted">Combine images into one PDF (multi-page).</p>
+
+            <div class="tool-file">
+              <label class="file-btn" for="pdfFileBtn"><i class="bi bi-images"></i> Choose images</label>
+              <input id="pdfFileBtn" type="file" accept="image/*" class="tool-input" data-tool="imgpdf" multiple>
+              <div id="pdfPreview" class="ms-2"></div>
+              <button id="pdfClear" class="btn btn-sm btn-outline-secondary ms-auto" style="display:none">Clear</button>
+            </div>
+
+            <label class="form-label">Orientation</label>
+            <select id="pdfOrient" class="form-select form-select-sm mb-2"><option value="portrait" selected>Portrait</option><option value="landscape">Landscape</option></select>
+
+            <div class="action-group">
+              <button id="imgToPdfBtn" class="btn btn-tool"><i class="bi bi-file-earmark-arrow-down"></i> Create PDF</button>
+              <a id="pdfDownload" class="download-link" style="display:none"><i class="bi bi-download"></i> Download</a>
+              <span id="pdfStatus" class="small-muted align-self-center">Ready</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4) JPG ↔ PNG -->
+        <div class="col-md-6">
+          <div class="card p-3 tool-card" id="card-convert">
+            <div class="tool-header">
+              <img src="icons/jpg2png.png" class="tool-logo" style="width:46px;height:46px;box-shadow:none" onerror="this.style.display='none'">
+              <h5>JPG ↔ PNG</h5>
+              <div class="tool-badge">Convert formats</div>
+            </div>
+            <p class="small-muted">Convert between JPG and PNG. Set quality for PNG→JPG.</p>
+
+            <div class="tool-file">
+              <label class="file-btn" for="convFileBtn"><i class="bi bi-image"></i> Choose image</label>
+              <input id="convFileBtn" type="file" accept="image/*" class="tool-input" data-tool="jpgpng">
+              <div id="convPreview" class="ms-2"></div>
+              <button id="convClear" class="btn btn-sm btn-outline-secondary ms-auto" style="display:none">Clear</button>
+            </div>
+
+            <label class="form-label">PNG → JPG Quality: <span id="convQualityLabel">0.9</span></label>
+            <input id="convQuality" type="range" min="0.1" max="1" step="0.01" value="0.9" class="form-range mb-2">
+
+            <div class="action-group">
+              <button id="jpgToPngBtn" class="btn btn-tool">JPG → PNG</button>
+              <button id="pngToJpgBtn" class="btn btn-tool">PNG → JPG</button>
+              <a id="convDownload" class="download-link" style="display:none"><i class="bi bi-download"></i> Download</a>
+              <span id="convStatus" class="small-muted align-self-center">Ready</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <footer class="mt-4 mb-5 text-center" style="max-width:1100px;margin:18px auto 0;">
+      <div class="small-muted">All processing occurs in your browser by default. API options are opt-in only.</div>
+    </footer>
+  </main>
+
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@1.0.18/dist/browser-image-compression.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js" defer></script>
+
+  <script>
+  (function(){
+    const $ = (s, ctx=document) => ctx.querySelector(s);
+    const $$ = (s, ctx=document) => Array.from(ctx.querySelectorAll(s));
+
+    // Featured template helpers
+    window.selectFeatured = (path) => {
+      const ft = $('#featuredThumb');
+      if(ft) ft.src = path;
+    };
+    $('#useFeaturedBtn').addEventListener ? $('#useFeaturedBtn').addEventListener('click', ()=> {
+      // fetch featured thumb as blob via fetch (same-origin). We'll use it as a global file object via fetch+blob.
+      const src = $('#featuredThumb').src;
+      if(!src) return alert('No featured image selected');
+      fetch(src).then(r=>r.blob()).then(blob=>{
+        const file = new File([blob], 'featured-sample.jpg', { type: blob.type || 'image/jpeg' });
+        // set as globalFiles first slot and also populate perTool previews if desired
+        globalFiles = globalFiles || [];
+        globalFiles.unshift(file);
+        renderQuickPreview();
+        alert('Featured image added to quick files — now choose it in a tool or use quick usage.');
+      }).catch(()=> alert('Cannot load featured image (check file path).'));
+    }) : null;
+
+    // Quick "global" preview (used when user picks featured / upload)
+    let globalFiles = [];
+    const quickUploader = $('#featuredUpload');
+    const quickPreview = null; // not used as we render in featured card itself
+    if(quickUploader) quickUploader.addEventListener('change', (e)=> {
+      const f = (e.target.files && e.target.files[0]) ? e.target.files[0] : null;
+      if(!f) return;
+      // insert to start of globalFiles
+      globalFiles.unshift(f);
+      // set featured thumb src (preview)
+      const ft = $('#featuredThumb');
+      if(ft){
+        ft.src = URL.createObjectURL(f);
+        setTimeout(()=> URL.revokeObjectURL(ft.src), 30000);
+      }
+      alert('Uploaded and set as featured preview. Now go to any tool and choose "Use global file" (it will be used automatically if you have not chosen per-tool file).');
+    });
+
+    // Per-tool file handling & previews
+    const perTool = {};
+    // initialize tool inputs (there are 4)
+    $$('.tool-input').forEach(inp => {
+      const tool = inp.dataset.tool;
+      const preview = inp.id === 'compFileBtn' ? $('#compPreview') :
+                      inp.id === 'resizeFileBtn' ? $('#resizePreview') :
+                      inp.id === 'pdfFileBtn' ? $('#pdfPreview') :
+                      inp.id === 'convFileBtn' ? $('#convPreview') : null;
+      const clearBtn = inp.id === 'compFileBtn' ? $('#compClear') :
+                       inp.id === 'resizeFileBtn' ? $('#resizeClear') :
+                       inp.id === 'pdfFileBtn' ? $('#pdfClear') :
+                       inp.id === 'convFileBtn' ? $('#convClear') : null;
+
+      // When label for input is clicked, native file dialog opens thanks to "for" attr.
+      inp.addEventListener('change', (e)=>{
+        const files = inp.files ? Array.from(inp.files) : [];
+        perTool[tool] = files.length === 1 ? files[0] : files;
+        // render preview
+        if(!preview) return;
+        preview.innerHTML = '';
+        const arr = Array.isArray(perTool[tool]) ? perTool[tool] : (perTool[tool] ? [perTool[tool]] : []);
+        if(!arr.length){
+          preview.innerHTML = '<div class="small-muted">No file selected</div>';
+          if(clearBtn) clearBtn.style.display='none';
+        } else {
+          arr.slice(0,3).forEach(f=>{
+            if(!f.type || !f.type.startsWith('image/')) return;
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(f); img.onload = ()=> URL.revokeObjectURL(img.src);
+            img.className = 'thumb-preview';
+            preview.appendChild(img);
+          });
+          if(clearBtn) clearBtn.style.display='inline-block';
+        }
+      });
+
+      if(clearBtn){
+        clearBtn.addEventListener('click', ()=>{
+          inp.value = ''; perTool[tool] = null;
+          const p = preview;
+          if(p) p.innerHTML = '<div class="small-muted">No file selected</div>';
+          clearBtn.style.display='none';
+        });
+      }
+    });
+
+    // show initial "No file selected" text
+    ['compPreview','resizePreview','pdfPreview','convPreview'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.innerHTML = '<div class="small-muted">No file selected</div>';
+    });
+
+    // Helper: prefer per-tool file, else first global file
+    function fileFor(tool){
+      if(perTool[tool]) return perTool[tool];
+      return globalFiles.length ? globalFiles[0] : null;
+    }
+
+    // helper create download link from blob
+    function createDownloadLink(aEl, blob, filename){
+      if(!aEl) return saveBlob(blob, filename);
+      const url = URL.createObjectURL(blob);
+      aEl.href = url;
+      aEl.download = filename;
+      aEl.style.display = 'inline-flex';
+      // revoke after some time to free memory
+      setTimeout(()=> URL.revokeObjectURL(url), 30000);
+    }
+
+    // fallback raw save
+    function saveBlob(blob, filename){
+      try{
+        if(window.saveAs) { window.saveAs(blob, filename); return; }
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(()=> URL.revokeObjectURL(a.href), 1500);
+      }catch(e){ console.error('save failed', e); alert('Save failed'); }
+    }
+
+    // ---------- COMPRESSOR ----------
+    const compQuality = $('#compQuality'), compQualityLabel = $('#compQualityLabel');
+    if(compQuality) compQuality.addEventListener('input', ()=> compQualityLabel.textContent = compQuality.value);
+
+    $('#compressBtn').addEventListener('click', async ()=>{
+      const f = fileFor('compressor');
+      if(!f) return alert('Select an image (compressor).');
+      const targetKb = parseInt($('#compTargetKb').value) || null;
+      const targetPerc = parseInt($('#compTargetPerc').value) || null;
+      const maxEdge = parseInt($('#compMaxEdge').value) || undefined;
+      const startQuality = parseFloat(compQuality ? compQuality.value : 0.8) || 0.8;
+
+      $('#compStatus').textContent = 'Compressing...';
+      try{
+        // target KB iterative approach
+        if(targetKb){
+          let q = startQuality;
+          let lastGood = null;
+          for(let i=0;i<8;i++){
+            const opts = { initialQuality: q, useWebWorker:true, maxWidthOrHeight: maxEdge || undefined };
+            const blob = await imageCompression(f, opts);
+            const kb = Math.round(blob.size/1024);
+            if(kb <= targetKb){ lastGood = blob; break; }
+            q = q - 0.12;
+            if(q < 0.2) break;
+          }
+          if(lastGood){
+            const filename = (f.name.replace(/\.[^/.]+$/, '')) + `-compressed-${targetKb}KB.jpg`;
+            createDownloadLink($('#compDownload'), lastGood, filename);
+            $('#compStatus').textContent = 'Done';
+            return;
+          }
+          // fallback to single pass if not achieved
+        }
+
+        if(targetPerc){
+          const desired = Math.max(10, Math.round((100-targetPerc)/100 * f.size));
+          let q = Math.min(0.95, startQuality * ((desired / f.size) || 1));
+          const b = await imageCompression(f, { initialQuality: q, useWebWorker:true, maxWidthOrHeight: maxEdge || undefined });
+          const filename = (f.name.replace(/\.[^/.]+$/, '')) + `-compressed-${targetPerc}pct.jpg`;
+          createDownloadLink($('#compDownload'), b, filename);
+          $('#compStatus').textContent = 'Done';
+          return;
+        }
+
+        const blob = await imageCompression(f, { initialQuality: startQuality, useWebWorker:true, maxWidthOrHeight: maxEdge || undefined });
+        const filename = (f.name.replace(/\.[^/.]+$/, '')) + '-compressed.jpg';
+        createDownloadLink($('#compDownload'), blob, filename);
+        $('#compStatus').textContent = 'Done';
+      }catch(err){
+        console.error(err); alert('Compression failed: '+(err.message||err));
+        $('#compStatus').textContent = 'Error';
+      }
+    });
+
+    // Batch compress (auto-download sequentially)
+    $('#compressBatchBtn').addEventListener('click', async ()=>{
+      const files = Array.isArray(perTool['compressor']) ? perTool['compressor'] : (globalFiles.length ? globalFiles : (perTool['compressor'] ? [perTool['compressor']] : []));
+      if(!files || !files.length) return alert('No files for batch compress.');
+      $('#compStatus').textContent = 'Batch running...';
+      for(const f of files){
+        try{
+          const blob = await imageCompression(f, { initialQuality: parseFloat(compQuality ? compQuality.value : 0.8), useWebWorker:true });
+          saveBlob(blob, (f.name.replace(/\.[^/.]+$/, '')) + '-compressed.jpg');
+        }catch(e){ console.error('batch err', e); }
+      }
+      $('#compStatus').textContent = 'Batch done';
+    });
+
+    // ---------- RESIZE & ROTATE ----------
+    const rotRange = $('#rotRange'), rotLabel = $('#rotLabel');
+    if(rotRange && rotLabel) rotRange.addEventListener('input', ()=> rotLabel.textContent = rotRange.value);
+
+    $$('.rotatePreset').forEach(btn => btn.addEventListener('click', (e)=>{
+      const deg = parseInt(e.currentTarget.dataset.rotate);
+      if(rotRange){ rotRange.value = deg; if(rotLabel) rotLabel.textContent = deg; }
+    }));
+
+    $('#applyResizeBtn').addEventListener('click', async ()=>{
+      const f = fileFor('resize');
+      if(!f) return alert('Select image for resize.');
+      const w = parseInt($('#resizeW').value) || null;
+      const h = parseInt($('#resizeH').value) || null;
+      const keep = $('#keepAspect').checked;
+      const rot = rotRange ? parseInt(rotRange.value) || 0 : 0;
+      if(!w && !h && rot===0) return alert('Set width or height or rotate.');
+      $('#resizeStatus').textContent = 'Processing...';
+      try{
+        const dataUrl = await new Promise((res, rej)=>{ const fr=new FileReader(); fr.onload=()=>res(fr.result); fr.onerror=rej; fr.readAsDataURL(f); });
+        const img = await new Promise((res, rej)=> { const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=dataUrl; });
+
+        let newW = img.width, newH = img.height;
+        if(w && h){ newW = w; newH = h; }
+        else if(w){ newW = w; newH = keep ? Math.round(img.height*(w/img.width)) : img.height; }
+        else if(h){ newH = h; newW = keep ? Math.round(img.width*(h/img.height)) : img.width; }
+
+        // rotation-aware canvas
+        const rad = rot * Math.PI / 180;
+        const sin = Math.abs(Math.sin(rad)), cos = Math.abs(Math.cos(rad));
+        const cw = Math.round(newW * cos + newH * sin);
+        const ch = Math.round(newW * sin + newH * cos);
+
+        const canvas = document.createElement('canvas'); canvas.width = cw; canvas.height = ch;
+        const ctx = canvas.getContext('2d');
+        ctx.translate(cw/2, ch/2);
+        ctx.rotate(rad);
+        const tmp = document.createElement('canvas'); tmp.width = newW; tmp.height = newH;
+        tmp.getContext('2d').drawImage(img, 0, 0, newW, newH);
+        ctx.drawImage(tmp, -newW/2, -newH/2);
+
+        canvas.toBlob(blob=>{
+          const filename = (f.name.replace(/\.[^/.]+$/, '')) + `-resized-${newW}x${newH}-rot${rot}.jpg`;
+          createDownloadLink($('#resizeDownload'), blob, filename);
+          $('#resizeStatus').textContent = 'Done';
+        }, 'image/jpeg', 0.92);
+      }catch(e){ console.error(e); alert('Resize failed'); $('#resizeStatus').textContent='Error'; }
+    });
+
+    // ---------- IMAGE -> PDF ----------
+    $('#imgToPdfBtn').addEventListener('click', async ()=>{
+      const files = perTool['imgpdf'] ? (Array.isArray(perTool['imgpdf']) ? perTool['imgpdf'] : [perTool['imgpdf']]) : globalFiles;
+      if(!files || files.length===0) return alert('Select images for PDF.');
+      $('#pdfStatus').textContent = 'Creating PDF...';
+      try{
+        const { jsPDF } = window.jspdf;
+        const orient = $('#pdfOrient').value || 'portrait';
+        const pdf = new jsPDF({ unit:'pt', format:'a4', orientation:orient });
+        for(let i=0;i<files.length;i++){
+          const f = files[i];
+          const dataUrl = await new Promise((res, rej)=>{ const fr=new FileReader(); fr.onload=()=>res(fr.result); fr.onerror=rej; fr.readAsDataURL(f); });
+          const img = await new Promise((res, rej)=> { const ii=new Image(); ii.onload=()=>res(ii); ii.onerror=rej; ii.src=dataUrl; });
+          const pageW = pdf.internal.pageSize.getWidth(), pageH = pdf.internal.pageSize.getHeight();
+          const ratio = Math.min(pageW/img.width, pageH/img.height);
+          const imgW = img.width*ratio, imgH = img.height*ratio;
+          pdf.addImage(dataUrl, f.type.includes('png') ? 'PNG' : 'JPEG', (pageW-imgW)/2, (pageH-imgH)/2, imgW, imgH);
+          if(i < files.length-1) pdf.addPage();
+        }
+        const blob = pdf.output('blob');
+        createDownloadLink($('#pdfDownload'), blob, 'images.pdf');
+        $('#pdfStatus').textContent = 'Done';
+      }catch(e){ console.error(e); alert('PDF creation failed'); $('#pdfStatus').textContent='Error'; }
+    });
+
+    // ---------- JPG -> PNG & PNG -> JPG ----------
+    $('#jpgToPngBtn').addEventListener('click', async ()=>{
+      const f = fileFor('jpgpng');
+      if(!f) return alert('Select image (JPG → PNG).');
+      $('#convStatus').textContent = 'Converting...';
+      try{
+        const dataUrl = await new Promise((res, rej)=>{ const fr=new FileReader(); fr.onload=()=>res(fr.result); fr.onerror=rej; fr.readAsDataURL(f); });
+        const img = await new Promise((res, rej)=> { const ii=new Image(); ii.onload=()=>res(ii); ii.onerror=rej; ii.src=dataUrl; });
+        const canvas = document.createElement('canvas'); canvas.width = img.width; canvas.height = img.height;
+        canvas.getContext('2d').drawImage(img,0,0);
+        canvas.toBlob(blob=> {
+          createDownloadLink($('#convDownload'), blob, (f.name.replace(/\.[^/.]+$/, '')) + '.png');
+          $('#convStatus').textContent = 'Done';
+        }, 'image/png');
+      }catch(e){ console.error(e); alert('Convert failed'); $('#convStatus').textContent='Error'; }
+    });
+
+    $('#pngToJpgBtn').addEventListener('click', async ()=>{
+      const f = fileFor('jpgpng');
+      if(!f) return alert('Select image (PNG → JPG).');
+      $('#convStatus').textContent = 'Converting...';
+      try{
+        const q = parseFloat($('#convQuality').value || 0.9);
+        const dataUrl = await new Promise((res, rej)=>{ const fr=new FileReader(); fr.onload=()=>res(fr.result); fr.onerror=rej; fr.readAsDataURL(f); });
+        const img = await new Promise((res, rej)=> { const ii=new Image(); ii.onload=()=>res(ii); ii.onerror=rej; ii.src=dataUrl; });
+        const canvas = document.createElement('canvas'); canvas.width = img.width; canvas.height = img.height;
+        const ctx = canvas.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.drawImage(img,0,0);
+        canvas.toBlob(blob => {
+          createDownloadLink($('#convDownload'), blob, (f.name.replace(/\.[^/.]+$/, '')) + '.jpg');
+          $('#convStatus').textContent = 'Done';
+        }, 'image/jpeg', q);
+      }catch(e){ console.error(e); alert('Convert failed'); $('#convStatus').textContent='Error'; }
+    });
+
+    // Keyboard shortcut to open featured upload
+    document.addEventListener('keydown', (e)=>{
+      if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'o'){ e.preventDefault(); $('#featuredUpload').click(); }
+    });
+
+  })();
+  </script>
+
+  <script>
+  // title typing effect
+  (function(){
+    const finalTitle = "All Image Tools — Superfast Tools";
+    let idx = 0;
+    function type(){ if(idx<=finalTitle.length){ document.title = finalTitle.substring(0, idx); idx++; setTimeout(type, 40); } }
+    window.addEventListener('load', ()=>{ document.title=''; setTimeout(type, 200); });
+  })();
+  </script>
+</body>
+</html>
