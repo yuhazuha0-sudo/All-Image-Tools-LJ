@@ -121,60 +121,409 @@
 <section class="tools-wrap">
   <div class="row g-3">
 
-    <!-- 1) Image Compressor -->
-    <div class="col-md-6">
-      <div class="card p-3 tool-card" id="card-compressor">
-        <div class="tool-header">
-          <div class="mini-logo" aria-hidden>
-            <!-- SVG logo: compressor -->
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 12h6" stroke="#0d6efd" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M15 6l6 6-6 6" stroke="#6f42c1" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <h5>Image Compressor</h5>
-          <div class="tool-badge">Reduce size</div>
-        </div>
-        <p class="small-muted">Adjust quality / max edge. Processing happens in your browser.</p>
+   <!-- 1) Image Compressor -->
+<div class="col-md-6">
+  <div class="card p-3 tool-card" id="card-compressor">
+    <div class="tool-header d-flex align-items-center gap-2">
+      <div class="mini-logo" aria-hidden>
+        <!-- SVG logo: compressor -->
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+             xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 12h6" stroke="#0d6efd" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M15 6l6 6-6 6" stroke="#6f42c1" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h5 class="mb-0">Image Compressor</h5>
+      <div class="tool-badge ms-auto">Reduce size</div>
+    </div>
 
-        <div class="tool-file">
-          <label class="file-btn" for="compFileBtn"><i class="bi bi-image"></i> Choose image</label>
-          <input id="compFileBtn" type="file" accept="image/*" class="tool-input" data-tool="compressor">
-          <div id="compPreview" class="ms-2"></div>
-          <button id="compClear" class="btn btn-sm btn-outline-secondary ms-auto" style="display:none">Clear</button>
-        </div>
+    <p class="small-muted mb-2">
+      Adjust quality / max edge / target KB. Processing happens in your browser.
+    </p>
 
-        <!-- New options panel for compressor -->
-        <div class="row g-2 mb-2">
-          <div class="col-6">
-            <label class="form-label">Quality (0.1 - 1.0) <small id="compQualityLabel">0.8</small></label>
-            <input id="compQuality" type="range" min="0.1" max="1" step="0.01" value="0.8" class="form-range">
-          </div>
-          <div class="col-6">
-            <label class="form-label">Max long-edge (px)</label>
-            <input id="compMaxEdge" type="number" class="form-control form-control-sm" placeholder="e.g. 1600">
-          </div>
-        </div>
+    <!-- File input row -->
+    <div class="tool-file d-flex align-items-center gap-2 mb-2">
+      <label class="file-btn" for="compFileBtn">
+        <i class="bi bi-image"></i> Choose image
+      </label>
+      <input id="compFileBtn" type="file" accept="image/*"
+             class="tool-input d-none" data-tool="compressor">
+      <div id="compPreview" class="ms-2 small-muted"></div>
+      <button id="compClear" class="btn btn-sm btn-outline-secondary ms-auto"
+              style="display:none">Clear</button>
+    </div>
 
-        <div class="row g-2 mb-2">
-          <div class="col-6">
-            <label class="form-label">Output format</label>
-            <select id="compOutFormat" class="form-select form-select-sm"><option value="jpeg">JPEG</option><option value="png">PNG</option></select>
-          </div>
-          <div class="col-6">
-            <label class="form-label">Keep metadata</label>
-            <select id="compKeepMeta" class="form-select form-select-sm"><option value="no" selected>No</option><option value="yes">Yes</option></select>
-          </div>
-        </div>
+    <!-- Options panel -->
+    <div class="row g-2 mb-2">
+      <div class="col-6">
+        <label class="form-label">
+          Quality (0.1 - 1.0)
+          <small id="compQualityLabel" class="text-primary">0.8</small>
+        </label>
+        <input id="compQuality" type="range"
+               min="0.1" max="1" step="0.01" value="0.8"
+               class="form-range">
+      </div>
+      <div class="col-6">
+        <label class="form-label">Max long-edge (px)</label>
+        <input id="compMaxEdge" type="number"
+               class="form-control form-control-sm"
+               placeholder="e.g. 1600">
+      </div>
+    </div>
 
-        <div class="action-group">
-          <button id="compressBtn" class="btn btn-tool"><i class="bi bi-filter-circle"></i> Compress</button>
-          <a id="compDownload" class="download-link" style="display:none"><i class="bi bi-download"></i> Download</a>
-          <span id="compStatus" class="small-muted align-self-center">Ready</span>
+    <!-- Extra options: target KB + quick presets -->
+    <div class="row g-2 mb-2">
+      <div class="col-6">
+        <label class="form-label">
+          Target size (KB)
+          <small class="text-muted">(optional)</small>
+        </label>
+        <input id="compTargetKB" type="number"
+               class="form-control form-control-sm"
+               placeholder="e.g. 300">
+      </div>
+      <div class="col-6">
+        <label class="form-label mb-1">Quick quality presets</label>
+        <div class="btn-group w-100 btn-group-sm" role="group">
+          <button type="button" class="btn btn-outline-secondary compPresetBtn"
+                  data-q="0.3">30%</button>
+          <button type="button" class="btn btn-outline-secondary compPresetBtn"
+                  data-q="0.5">50%</button>
+          <button type="button" class="btn btn-outline-secondary compPresetBtn"
+                  data-q="0.7">70%</button>
+          <button type="button" class="btn btn-outline-secondary compPresetBtn"
+                  data-q="0.9">90%</button>
         </div>
       </div>
     </div>
 
+    <!-- Output options -->
+    <div class="row g-2 mb-2">
+      <div class="col-6">
+        <label class="form-label">Output format</label>
+        <select id="compOutFormat"
+                class="form-select form-select-sm">
+          <option value="jpeg">JPEG</option>
+          <option value="png">PNG</option>
+        </select>
+      </div>
+      <div class="col-6">
+        <label class="form-label">Keep metadata</label>
+        <select id="compKeepMeta"
+                class="form-select form-select-sm">
+          <option value="no" selected>No</option>
+          <option value="yes">Yes (basic)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="action-group d-flex align-items-center gap-2 mt-2">
+      <button id="compressBtn" class="btn btn-tool-main">
+        <i class="bi bi-filter-circle"></i> Compress
+      </button>
+      <a id="compDownload" class="btn btn-tool-download"
+         style="display:none">
+        <i class="bi bi-download"></i> Download
+      </a>
+      <span id="compStatus"
+            class="small-muted ms-auto text-muted">Ready</span>
+    </div>
+  </div>
+</div>
+
+<!-- ====== CSS: colorful buttons etc. ====== -->
+<style>
+  .btn-tool-main {
+    background: linear-gradient(135deg, #0d6efd, #6610f2);
+    color: #fff;
+    border: none;
+    font-weight: 500;
+    padding-inline: 1.1rem;
+  }
+  .btn-tool-main:hover {
+    opacity: 0.9;
+    color: #fff;
+  }
+  .btn-tool-download {
+    background: linear-gradient(135deg, #20c997, #0dcaf0);
+    color: #fff !important;
+    border: none;
+    font-weight: 500;
+    padding-inline: 1.1rem;
+    text-decoration: none;
+  }
+  .btn-tool-download:hover {
+    opacity: 0.9;
+    color: #fff !important;
+    text-decoration: none;
+  }
+  .file-btn {
+    cursor: pointer;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    border: 1px dashed #6c757d;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .file-btn:hover {
+    border-style: solid;
+  }
+  #compPreview img {
+    max-height: 40px;
+    border-radius: 4px;
+  }
+</style>
+
+<!-- ====== JS: compressor logic (no "not defined" error) ====== -->
+<script>
+  (function () {
+    let originalFile = null;
+    let originalImage = null;
+    let downloadUrl = null;
+
+    const fileInput     = document.getElementById('compFileBtn');
+    const previewEl     = document.getElementById('compPreview');
+    const clearBtn      = document.getElementById('compClear');
+    const qualityRange  = document.getElementById('compQuality');
+    const qualityLabel  = document.getElementById('compQualityLabel');
+    const maxEdgeInput  = document.getElementById('compMaxEdge');
+    const targetKBInput = document.getElementById('compTargetKB');
+    const outFormatSel  = document.getElementById('compOutFormat');
+    const compressBtn   = document.getElementById('compressBtn');
+    const downloadLink  = document.getElementById('compDownload');
+    const statusEl      = document.getElementById('compStatus');
+
+    // ---------- helpers ----------
+    function setStatus(msg) {
+      if (statusEl) statusEl.textContent = msg;
+    }
+
+    function resetDownload() {
+      if (downloadUrl) {
+        URL.revokeObjectURL(downloadUrl);
+        downloadUrl = null;
+      }
+      downloadLink.style.display = 'none';
+    }
+
+    function showPreview(file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.alt = 'Preview';
+        previewEl.innerHTML = '';
+        previewEl.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+      clearBtn.style.display = 'inline-block';
+    }
+
+    function loadImage(file) {
+      return new Promise(function (resolve, reject) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const img = new Image();
+          img.onload = function () { resolve(img); };
+          img.onerror = reject;
+          img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function drawToCanvas(img, maxEdge) {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      let w = img.width;
+      let h = img.height;
+
+      if (maxEdge && maxEdge > 0) {
+        const longer = Math.max(w, h);
+        if (longer > maxEdge) {
+          const scale = maxEdge / longer;
+          w = Math.round(w * scale);
+          h = Math.round(h * scale);
+        }
+      }
+
+      canvas.width = w;
+      canvas.height = h;
+      ctx.drawImage(img, 0, 0, w, h);
+
+      return canvas;
+    }
+
+    function getMime(format) {
+      if (format === 'png') return 'image/png';
+      return 'image/jpeg';
+    }
+
+    // Simple compress using given quality
+    function compressSimple(img, options) {
+      return new Promise(function (resolve, reject) {
+        try {
+          const canvas = drawToCanvas(img, options.maxEdge);
+          const mime = getMime(options.format);
+          const q = options.quality;
+          canvas.toBlob(function (blob) {
+            if (!blob) {
+              reject(new Error('Compression failed.'));
+              return;
+            }
+            resolve(blob);
+          }, mime, q);
+        } catch (err) {
+          reject(err);
+        }
+      });
+    }
+
+    // Binary search for approx target size (KB)
+    function compressToTargetKB(img, options, targetKB) {
+      return new Promise(function (resolve, reject) {
+        const canvas = drawToCanvas(img, options.maxEdge);
+        const mime = getMime(options.format);
+        let low = 0.1;
+        let high = 1.0;
+        let iteration = 0;
+        const maxIterations = 10;
+        const targetBytes = targetKB * 1024;
+        const tolerance = targetBytes * 0.1; // +/-10%
+
+        function step() {
+          const q = (low + high) / 2;
+          canvas.toBlob(function (blob) {
+            if (!blob) {
+              reject(new Error('Compression failed.'));
+              return;
+            }
+            const size = blob.size;
+            if (Math.abs(size - targetBytes) <= tolerance || iteration >= maxIterations) {
+              resolve(blob); // good enough
+              return;
+            }
+            if (size > targetBytes) {
+              // too big -> reduce quality
+              high = q;
+            } else {
+              // too small -> increase quality
+              low = q;
+            }
+            iteration++;
+            step();
+          }, mime, q);
+        }
+
+        step();
+      });
+    }
+
+    // ---------- Event listeners ----------
+
+    // Quality range label
+    qualityRange.addEventListener('input', function () {
+      qualityLabel.textContent = qualityRange.value;
+    });
+
+    // Quick preset buttons
+    document.querySelectorAll('.compPresetBtn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const q = this.getAttribute('data-q');
+        if (!q) return;
+        qualityRange.value = q;
+        qualityLabel.textContent = q;
+      });
+    });
+
+    // File chosen
+    fileInput.addEventListener('change', async function () {
+      if (!fileInput.files || !fileInput.files[0]) {
+        return;
+      }
+      originalFile = fileInput.files[0];
+      setStatus('Loading image...');
+      resetDownload();
+      showPreview(originalFile);
+
+      try {
+        originalImage = await loadImage(originalFile);
+        const sizeKB = (originalFile.size / 1024).toFixed(1);
+        setStatus('Loaded ' + sizeKB + ' KB');
+      } catch (err) {
+        console.error(err);
+        setStatus('Failed to load image');
+      }
+    });
+
+    // Clear
+    clearBtn.addEventListener('click', function () {
+      originalFile = null;
+      originalImage = null;
+      fileInput.value = '';
+      previewEl.innerHTML = '';
+      clearBtn.style.display = 'none';
+      resetDownload();
+      setStatus('Ready');
+    });
+
+    // Compress
+    compressBtn.addEventListener('click', async function () {
+      if (!originalImage) {
+        setStatus('Please choose an image first.');
+        return;
+      }
+
+      resetDownload();
+      setStatus('Compressing...');
+
+      const quality = parseFloat(qualityRange.value) || 0.8;
+      const maxEdge = parseInt(maxEdgeInput.value, 10) || null;
+      const format = outFormatSel.value || 'jpeg';
+      const targetKB = parseInt(targetKBInput.value, 10) || null;
+
+      const options = { quality, maxEdge, format };
+
+      try {
+        let blob;
+
+        if (targetKB && getMime(format) !== 'image/png') {
+          // Target KB approx (works best with JPEG)
+          blob = await compressToTargetKB(originalImage, options, targetKB);
+        } else {
+          // Simple quality-based compress
+          blob = await compressSimple(originalImage, options);
+        }
+
+        const finalSizeKB = (blob.size / 1024).toFixed(1);
+        setStatus('Compressed: ' + finalSizeKB + ' KB');
+
+        downloadUrl = URL.createObjectURL(blob);
+        downloadLink.href = downloadUrl;
+
+        const ext = format === 'png' ? 'png' : 'jpg';
+        const baseName = (originalFile && originalFile.name)
+          ? originalFile.name.replace(/\.[^.]+$/, '')
+          : 'compressed-image';
+        downloadLink.download = baseName + '-compressed.' + ext;
+
+        downloadLink.style.display = 'inline-block';
+      } catch (err) {
+        console.error(err);
+        setStatus('Error: ' + (err.message || 'Compression failed'));
+      }
+    });
+
+  })();
+        </script>
     <!-- 2) Resize -->
     <div class="col-md-6">
       <div class="card p-3 tool-card" id="card-resize">
