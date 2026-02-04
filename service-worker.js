@@ -1,6 +1,6 @@
 // Basic cache-first service worker for All Image Tools
 
-const CACHE_NAME = "all-image-tools-v2";
+const CACHE_NAME = "all-image-tools-LJ-v2";
 const STATIC_ASSETS = [
   "/",
   "/index.html",
